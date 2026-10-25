@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+# Raw run outputs are kept only when curated as baselines/gap archives;
+# scratch runs go to /tmp instead.
+results/tmp/
