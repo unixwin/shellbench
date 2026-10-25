@@ -72,6 +72,17 @@ def cmd_run(args) -> int:
             "started": datetime.datetime.now().isoformat(timespec="seconds"),
             "reps": args.reps, "warmup": args.warmup, **host_meta()}
     runner = Runner(shell, reps=args.reps, warmup=args.warmup)
+    if args.verify_only:
+        bad = 0
+        for i, case in enumerate(cases, 1):
+            r = runner.verify_case(case)
+            if r.status != "ok":
+                bad += 1
+                print("[%d/%d] %-46s %-13s %s" % (i, len(cases), r.id,
+                      r.status, r.error), flush=True)
+        print("verify-only: %d ok / %d total" % (len(cases) - bad,
+                                                 len(cases)))
+        return 1 if bad else 0
     results = []
     for i, case in enumerate(cases, 1):
         r = runner.run_case(case)
@@ -152,6 +163,8 @@ def main(argv=None) -> int:
     p.add_argument("--tag")
     p.add_argument("--filter")
     p.add_argument("--limit", type=int)
+    p.add_argument("--verify-only", action="store_true",
+                   help="run each case once, check status/output, no timing")
     p.add_argument("--save-baseline")
     p.set_defaults(fn=cmd_run)
 

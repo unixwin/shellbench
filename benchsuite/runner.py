@@ -102,7 +102,39 @@ class Runner:
                 res.status = "verify-failed"
                 res.error = "output does not match %r" % case.expect_out
                 return res
+        return self._time(case, argv, env, workdir, res)
 
+    def verify_case(self, case: Case) -> CaseResult:
+        """Single captured run, no timing: corpus hygiene check."""
+        res = CaseResult(id=case.id, title=case.title,
+                         category=case.category, kind=case.kind,
+                         iters=case.iters, runs_ns=[])
+        workdir = os.path.join(self.root, case.id.replace("/", "_"))
+        try:
+            argv, env = self._prepare(case, workdir)
+        except Exception as e:
+            res.status, res.error = "error", "prepare: %s" % e
+            return res
+        _, rc, out, err = self._launch(argv, workdir, env, case.timeout,
+                                       capture=True)
+        if err:
+            res.status, res.error = err, "verify run %s" % err
+            return res
+        res.verified = True
+        if rc != case.expect_rc:
+            res.status = "verify-failed"
+            res.error = "rc=%s expected %s" % (rc, case.expect_rc)
+            return res
+        if case.expect_out:
+            text = (out or b"").decode("utf-8", "replace")
+            if not re.search(case.expect_out, text):
+                res.status = "verify-failed"
+                res.error = "output does not match %r" % case.expect_out
+                return res
+        res.status = "ok"
+        return res
+
+    def _time(self, case, argv, env, workdir, res):
         # autorange loop cases toward the target run length
         if case.kind == "loop" and case.autorange:
             dt, _, _, err = self._launch(argv, workdir, env, case.timeout)
