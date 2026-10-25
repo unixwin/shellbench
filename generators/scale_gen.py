@@ -22,7 +22,7 @@ ROWS = [
     ("read_ifs_fields", "read fields per line", "@gen:csv:{n}",
      "while IFS=, read -r f1 f2 f3 f4 f5 f6; do c=$((c+1)); done < data.txt", ("io",)),
     ("grep_builtin_loop", "pattern test per line", "@gen:words:{n}",
-     "while IFS= read -r l; do [[ $l == *charlie* ]] && c=$((c+1)); done < data.txt", ("io", "cond")),
+     "while IFS= read -r l; do [[ $l == *charlie* ]] && c=$((c+1)); done < data.txt; : # rc guard: last line may not match", ("io", "cond")),
     ("sort_via_array", "array sort builtin loop (bubble-free: sort ext excluded; uses string join)",
      "@gen:words:{n}",
      "mapfile -t a < data.txt; x=${a[*]}", ("io",)),
