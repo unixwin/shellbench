@@ -80,7 +80,8 @@ results/                每次运行的三件套 + 差距表存档（基线进 g
 ## 4. 分类学全图
 
 覆盖原则：**先全后深**——每个角落先有至少一批用例（哪怕浅），
-再按差距结果加深。当前 v1 共 16 类、409 条。
+再按差距结果加深。v1 共 16 类、409 条；v2 扩容后共 **18 类、779 条**
+（新增 coproc、errors 两类，逐类 v2 总数见本节末附注）。
 
 | 分类 | 覆盖面 | v1 条数 | 后续加深方向 |
 |---|---|---|---|
@@ -100,11 +101,22 @@ results/                每次运行的三件套 + 差距表存档（基线进 g
 | jobs | 后台+wait 扇出、`$!`、kill -TERM/-0、jobs/disown、trap 安装清除/USR1 投递/EXIT/DEBUG | 12 | 并发作业数阶梯、信号风暴、fg/bg 交互形（需 pty，后置） |
 | data | 大数据阶梯（生成器：10/1k/100k 行 × 读循环/mapfile/字段切分/assoc 填/数组填）+ 批量输出/大转储/字符串与数组增长曲线 | 34 | 1M 行档、混合读写、二进制安全面 |
 | mixed | 真实脚本形状：日志统计、配置解析、文件名变换、报表、状态机、字段手术、派发循环、参数解析 | 8 | 从真实脚本库采样扩充（每类 ≥5 个形状） |
+| coproc | 协进程：具名 coproc 请求/响应往返、流式生产者/排序过滤、生成与销毁生命周期（v2 新增） | 10 | 双向大流量背压形、coproc 与管道混编 |
+| errors | 错误路径吞吐：命令查找失败、重定向失败、内建失败（含子 shell 守卫的致命形）（v2 新增） | 12 | 语法错误恢复、权限位矩阵（需 fixture chmod 支持） |
 | （交互相邻） | history/fc/compgen/complete 等非交互可测面（暂挂 builtin 类） | 含上 | pty 驱动的补全/历史专项（独立 harness，后置） |
 
 分类学维护规则：bash 参考手册每出现一个可测构造，分类学必须有对应
 行；暂时测不了的（需要 pty、需要真 Windows 句柄等）显式标注后置，
 不许静默缺席。
+
+**v2 附注（2026-10-25 扩容）**：v2 不动 v1 任何用例的语义与编号，
+只做加法：薄类翻倍（parse 8→28、funcs 12→36、mixed 8→28、jobs
+12→29、glob 12→26），新增 coproc（10）与 errors（12）两类，其余类以
+「形态 × 规模」阶梯与矩阵补全加厚（expand 71→124、strings 18→54、
+cond 18→42、subst 14→38、control 19→38、data 34→48、redir 18→35、
+builtin 68→92、arith 67→79、arrays 20→36、startup 10→24）。全部
+v2 用例带 `v2` 标签（`bench.py list --tag v2`），新生成器在
+`generators/v2_gen.py`，逐类 v2 总数即上列数字，合计 **779 条**。
 
 ## 5. 基线对照与回归门
 
@@ -117,7 +129,9 @@ python3 bench.py compare new.json --baseline base.json --threshold 5
 - 逐用例比 ns/op 中位数，Δ% 超 +阈值标 `REGRESSION`、低于 -阈值标
   `IMPROVED`；有回归时退出码非零——可直接挂进 CI / 发版检查单；
 - 基线 JSON 连同采集元数据（机器/版本/load）一起进 git 存档，
-  换机器必须重采基线，禁止跨机器比数。
+  换机器必须重采基线，禁止跨机器比数；
+- **基线按平台分文件**（§7.1）：一份基线只服务于它的采集平台，
+  文件名/目录带平台标识，禁止跨平台 compare / gap。
 
 ## 6. 差距表（三档）
 
@@ -143,6 +157,39 @@ ratio = subject 时间 / reference 时间（<1 表示 subject 更快），三档
   GNU bash 5.x 经 Homebrew 安装后同口径跑。
 - **Android/Termux**：后置；运行器本身可跑，待 rubash 移动端构建
   就绪后接入同一语料（与 niu #352 的移动端矩阵呼应）。
+
+### 7.1 跨平台纪律（铁规）
+
+1. **绝对值禁止跨平台比较**：进程创建成本跨平台差一个量级
+   （Windows 的 CreateProcess 尤甚），同一用例的 ns/op 绝对值
+   离开采集平台毫无意义。**差距比值永远是同平台内的对**：
+   「同平台 rubash vs 同平台 GNU」——ratio 随平台各采一份，
+   跨平台只许比 ratio 的形状，不许比绝对值。
+2. **基线按平台分文件存档**：结果与基线文件名带平台标识
+   （如 `results/linux-x86_64/…`、`results/windows-x86_64/…`），
+   compare / gap 只接受同平台两份输入；换平台 = 在该平台重采
+   GNU 基线，不存在「一份基线走天下」。
+3. **用例的平台适用性是语料数据的一部分**（v2 起）：带 Unix
+   专属假设的用例必须在数据里显式标注能力谓词（`cap:*` 标签，
+   注册表 `cases/__init__.py` 内集中定义与推导），不满足的平台
+   该例**不适用**（跳过并在报表中列明），不许在其他平台静默
+   失效或产出假数。谓词表：
+
+   | 谓词 | 含义 |
+   |---|---|
+   | `cap:devfs` | 引用 `/dev/...` 设备路径（Windows 上由 shell 层提供，假设仍须显式） |
+   | `cap:posix-signals` | 使用 USR1/USR2/CHLD/PIPE 等 POSIX 信号名 |
+   | `cap:utf8-locale` | 钉住 `LC_ALL=C.UTF-8`（glibc 拼写的 UTF-8 locale） |
+   | `cap:posix-path` | Unix PATH 形态（`:` 分隔、`/usr/bin` 式根） |
+   | `cap:case-sensitive-fs` | 要求仅大小写不同的文件共存 |
+
+   平台能力画像（概要）：Linux 五项全备；macOS 缺
+   `cap:utf8-locale` 的 glibc 拼写（需本地化变体后才适用）；
+   Windows 原生：`cap:devfs` 由 shell 层（rubash / MSYS）提供
+   故适用，但 `cap:posix-signals`、`cap:posix-path` 不备、
+   `cap:case-sensitive-fs` 默认不备——相应案例在该平台不适用；
+   Android/Termux 近 Unix 画像，locale 拼写需按当地核实。
+   无 `cap:*` 标签的用例在所有目标平台适用。
 
 ## 8. 已知限制（v1）
 

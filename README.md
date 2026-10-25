@@ -58,6 +58,16 @@ functions, substitution, redirection, globbing, conditionals, jobs and
 traps, big-data ladders, and realistic mixed scripts. The full taxonomy
 and the growth roadmap live in [DESIGN.md](DESIGN.md).
 
+v2 corpus: **779 cases, 18 categories** (v1 untouched, additions only):
+the thin categories at least doubled (parse, funcs, mixed, jobs, glob),
+two new categories (coprocesses, error paths), and scale ladders /
+form×size matrices across the board. List the expansion with
+`python3 bench.py list --tag v2`. Every v2 case also carries
+platform-applicability tags (`cap:*` — e.g. `cap:posix-signals`,
+`cap:devfs`) naming the platform capabilities it requires; see
+DESIGN.md section 7.1 for the cross-platform discipline (gap ratios
+are same-platform pairs only, baselines are archived per platform).
+
 ## Discipline
 
 Benchmark on a quiet machine (on this project's box: load < 2 and no
