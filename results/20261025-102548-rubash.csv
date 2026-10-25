@@ -1,0 +1,410 @@
+id,category,title,kind,iters,status,min_ns,median_ns,p95_ns,ns_per_op,ops_per_s
+startup.empty_c,startup,shell -c ':',process,1000,ok,8932145,11539086,22085344,11539086,86.7
+startup.true_c,startup,shell -c 'true',process,1000,ok,8811804,18193042,40256574,18193042,55.0
+startup.assign_c,startup,shell -c assignments,process,1000,ok,8518744,9670743,23833227,9670743,103.4
+startup.norc_c,startup,shell --norc -c ':',process,1000,ok,8363961,8882941,18219281,8882941,112.6
+startup.script_noop,startup,script file ':',process,1000,ok,3863078,4192402,5288827,4192402,238.5
+startup.script_small,startup,script file: assigns + fn def,process,1000,ok,5803459,7139775,9497563,7139775,140.1
+startup.login_c,startup,--login -c ':' (profile fixture),process,1000,ok,16603357,17433112,33001145,17433112,57.4
+startup.interactive_c,startup,-i -c ':' (rc fixture),process,1000,ok,16609536,17280152,18216618,17280152,57.9
+startup.biglib_source,startup,source 2000-function library,process,2000,ok,217526012,239945949,375173175,239945949,4.2
+startup.subshell_c,startup,shell -c '( : )',process,1000,ok,9631594,11714350,18395096,11714350,85.4
+parse.n_simple@3000,parse,parse -n: 3000 simple commands,process,3000,ok,67893509,122979085,234550020,122979085,8.1
+parse.n_funcs@1500,parse,parse -n: 1500 function definitions,process,1500,ok,115912721,216292481,267546178,216292481,4.6
+parse.n_control@2000,parse,parse -n: control/arith corpus,process,2000,ok,165265305,242428904,375680767,242428904,4.1
+parse.n_expand@2000,parse,parse -n: expansion-heavy corpus,process,2000,ok,115112991,225404957,369862615,225404957,4.4
+parse.n_mixed@5000,parse,parse -n: mixed corpus 5000 lines,process,5000,ok,272851760,337707900,598796977,337707900,3.0
+parse.quote_soup,parse,quote-removal heavy word,loop,8000,ok,114645239,135824753,217674024,16978.1,58899.4
+parse.comment_dense,parse,script load: comment-dense file,process,3000,ok,16146512,33187034,78405623,33187034,30.1
+parse.long_line,parse,script load: one 40k-char line,process,1,ok,15966441,17264950,41759859,17264950,57.9
+expand.tilde_home,expand,tilde ~ expansion,loop,5000,ok,140113058,167649212,269051828,33529.8,29824.2
+expand.tilde_user,expand,tilde ~user expansion,loop,5000,ok,235174618,248504612,365081569,49700.9,20120.4
+expand.tilde_plus,expand,tilde ~+ (PWD),loop,5000,ok,114995124,117566733,251893989,23513.3,42529.0
+expand.brace_list,expand,"brace {a,b,c} in assignment",loop,5000,ok,118120674,148624411,219056449,29724.9,33641.8
+expand.brace_range_num,expand,brace {1..50},loop,500,ok,65793356,115843517,200026471,231687.0,4316.2
+expand.brace_range_alpha,expand,brace {a..z},loop,3000,ok,216681315,303411852,401584250,101137.3,9887.6
+expand.brace_range_step,expand,brace {0..100..5},loop,2500,ok,134255177,177017931,324884125,70807.2,14122.9
+expand.brace_nested,expand,brace nested,loop,3000,ok,64944944,115617728,147525172,38539.2,25947.6
+expand.brace_cartesian,expand,"brace cartesian x{A,B}y{1,2}",loop,3000,ok,167911576,176095117,282399788,58698.4,17036.2
+expand.word_split,expand,unquoted word splitting,loop,3000,ok,143580562,169336454,269099809,56445.5,17716.2
+expand.word_nosplit_quoted,expand,quoted no-split,loop,8000,ok,117276237,135057962,248859866,16882.2,59233.8
+expand.nested_cmdsubst,expand,nested command substitution,loop,500,ok,427860813,515809158,574417642,1031618.3,969.4
+expand.default_cmdsubst,expand,${v:-$(...)} default with cmdsubst,loop,1000,ok,65781599,115713903,267180369,115713.9,8642.0
+expand.arith_in_subscript,expand,arithmetic inside subscript,loop,5000,ok,377786707,518504032,1045179236,103700.8,9643.1
+expand.double_nested_param,expand,${!a[i]} indirect via array,loop,5000,ok,115488704,128585329,167859477,25717.1,38884.7
+expand.glob_pattern_var,expand,pattern from variable in ${v#pat},loop,5000,ok,115135395,167255421,243357769,33451.1,29894.4
+expand.multi_word_assign,expand,multi expansion assignment,loop,8000,ok,228345239,281418316,367622953,35177.3,28427.4
+expand.history_char_bang,expand,$! last bg pid (set/unset mix),loop,8000,ok,217173354,270158198,790826558,33769.8,29612.3
+expand.random_read,expand,$RANDOM read,loop,8000,ok,265181899,268825508,321738174,33603.2,29759.1
+expand.seconds_read,expand,$SECONDS read,loop,8000,ok,166304053,319126625,374750079,39890.8,25068.4
+expand.lineno_read,expand,$LINENO read,loop,8000,ok,220959546,270735054,369817777,33841.9,29549.2
+strings.append_assign,strings,s+=chunk append,loop,5000,ok,84347110,166793297,220138102,33358.7,29977.2
+strings.concat_subst,strings,s=$s$x concat,loop,3000,ok,268347691,271250738,318993615,90416.9,11059.9
+strings.build_50k,strings,build 50k-char string by +=,script,10000,ok,316276497,323281099,369098709,32328.1,30932.8
+strings.join_default,strings,${a[*]} default join,loop,5000,ok,115509326,268310615,571613564,53662.1,18635.1
+strings.join_ifs,strings,"IFS=, join ${a[*]}",loop,2000,ok,670973935,779717026,1533568264,389858.5,2565.0
+strings.join_ifs_local,strings,local IFS join without subshell,loop,5000,ok,165353908,217361756,218234065,43472.4,23003.1
+strings.compare_eq_loop,strings,[[ == ]] string compare,loop,5000,ok,64293275,64590541,164493837,12918.1,77410.7
+strings.compare_lt_loop,strings,[[ < ]] lexicographic,loop,5000,ok,64293095,114906711,115798550,22981.3,43513.6
+strings.pattern_prefix,strings,[[ == pat* ]] prefix match,loop,5000,ok,64553225,115162905,180380228,23032.6,43416.8
+strings.pattern_glob_mid,strings,[[ == *mid* ]] glob match,loop,5000,ok,64964973,115081283,170417567,23016.3,43447.6
+strings.regex_simple,strings,[[ =~ ]] simple regex,loop,5000,ok,114695935,166167458,215713042,33233.5,30090.1
+strings.regex_groups,strings,[[ =~ ]] capture groups + BASH_REMATCH,loop,3000,ok,165286266,167833960,266428140,55944.7,17874.8
+strings.regex_nomatch,strings,[[ =~ ]] non-matching,loop,3000,ok,64326895,65362580,117028596,21787.5,45897.8
+strings.regex_alt,strings,[[ =~ ]] alternation,loop,9000,ok,215564739,267355032,336680639,29706.1,33663.1
+strings.trim_ws_param,strings,whitespace trim via patterns,loop,3000,ok,65021047,150219175,199940672,50073.1,19970.8
+strings.case_conv_loop,strings,${v^^} on sentence,loop,3000,ok,118358021,169113569,223452927,56371.2,17739.6
+strings.pad_printf,strings,printf padded field,loop,3000,ok,167991476,267856634,270430657,89285.5,11200.0
+strings.repeat_printf,strings,printf %*s width from arg,loop,3000,ok,167013528,266585526,318750631,88861.8,11253.4
+arrays.append_loop,arrays,a+=(x) append in loop,loop,3000,ok,116025660,170841202,222936922,56947.1,17560.2
+arrays.assign_idx_mod,arrays,a[i%64]=x indexed assign,loop,8000,ok,435917794,586654866,1055340725,73331.9,13636.6
+arrays.read_elem,arrays,a[42] element read,loop,8000,ok,218588367,318261948,367304946,39782.7,25136.5
+arrays.read_negidx,arrays,a[-1] negative index,loop,8000,ok,164714648,266840899,397216705,33355.1,29980.4
+arrays.compound_assign,arrays,a=(...) compound assign,loop,3000,ok,116722947,176729849,220840046,58909.9,16975.1
+arrays.iterate_atq@1000,arrays,"""${a[@]}"" full iteration",script,1000,ok,66703613,82679988,134173074,82680.0,12094.8
+arrays.iterate_index@1000,arrays,indexed iteration a[j],script,1000,ok,64207797,64296571,178042490,64296.6,15552.9
+arrays.iterate_keys@1000,arrays,"""${!a[@]}"" index iteration",script,1000,ok,64527948,115292259,115734133,115292.3,8673.6
+arrays.slice@1000,arrays,slice ${a[@]:100:50} of 1000,loop,300,ok,168045106,215936157,266129592,719787.2,1389.3
+arrays.copy_unset@1000,arrays,copy + unset middle element,loop,200,ok,883649998,923276045,1120374572,4616380.2,216.6
+arrays.declare_p@1000,arrays,declare -p of 1000-element array,loop,100,ok,115457778,166474089,281710855,1664740.9,600.7
+arrays.assoc_setget,arrays,assoc set+get pair,loop,3000,ok,269657786,316416288,368249644,105472.1,9481.2
+arrays.assoc_get_hit,arrays,assoc get (hit),loop,8000,ok,164722770,215721704,270866410,26965.2,37084.8
+arrays.assoc_get_miss,arrays,assoc get (miss),loop,8000,ok,1024076447,2047293725,2293115461,255911.7,3907.6
+arrays.assoc_iterate@1000,arrays,"""${!m[@]}"" assoc key iteration",script,1000,ok,64327046,64465804,115290467,64465.8,15512.1
+arrays.assoc_values@1000,arrays,"""${m[@]}"" assoc value iteration",script,1000,ok,64338463,64438484,67012325,64438.5,15518.7
+arrays.assoc_fill@10000,arrays,assoc fill 10000 entries,script,10000,ok,214793252,264886477,415921636,26488.6,37752.0
+arrays.append@100000,arrays,append 100k elements one by one,script,100000,ok,10294948355,12381549178,17485429058,123815.5,8076.5
+arrays.sparse_set,arrays,sparse array far index assign,loop,2000,ok,115092981,168443083,226784156,84221.5,11873.4
+arrays.length_elem,arrays,${#a[3]} element length,loop,8000,ok,318117761,371899061,431155888,46487.4,21511.2
+control.if_true,control,if true branch,loop,3000,ok,64469470,126010605,173966903,42003.5,23807.5
+control.if_false_else,control,if/else false branch,loop,3000,ok,114520101,118299163,228834423,39433.1,25359.4
+control.elif_chain_hit3,control,"elif chain, 3rd matches",loop,3000,ok,164661288,273990719,367711957,91330.2,10949.3
+control.for_list,control,for over literal list (body x20),loop,1000,ok,274049207,421925806,467143564,421925.8,2370.1
+control.for_arith_inner,control,for((;;)) inner loop x50,loop,500,ok,368894683,534178936,639220071,1068357.9,936.0
+control.while_count,control,while arithmetic count x50,loop,500,ok,418826505,928185613,2111605117,1856371.2,538.7
+control.until_count,control,until arithmetic count x50,loop,500,ok,370957648,601311732,770555497,1202623.5,831.5
+control.case_first,control,case first pattern hits,loop,3000,ok,115842045,125497675,130053983,41832.6,23904.8
+control.case_last,control,case last pattern hits,loop,3000,ok,66285635,98472017,165183963,32824.0,30465.5
+control.case_fallthrough,control,case ;& fallthrough,loop,3000,ok,176101166,265977473,268946870,88659.2,11279.2
+control.and_or,control,&& || list chain,loop,3000,ok,317544080,365960849,424177345,121986.9,8197.6
+control.negation,control,! negation,loop,6000,ok,114598900,215572461,271901464,35928.7,27832.9
+control.brace_group,control,{ } group,loop,3000,ok,166569702,224896964,320445954,74965.7,13339.4
+control.subshell_group,control,( ) subshell group,loop,500,ok,167028721,268640410,270004808,537280.8,1861.2
+control.double_paren_cmd,control,(( )) as condition,loop,8000,ok,65326055,115489956,219402378,14436.2,69270.1
+control.test_bracket_chain,control,[ ] && [ ] chain,loop,5000,ok,265370383,370062325,522631596,74012.5,13511.2
+control.cond_dbracket_and,control,[[ && ]] compound,loop,5000,ok,115213161,223121239,421850974,44624.2,22409.3
+control.pipeline_status,control,PIPESTATUS read after pipeline,loop,1000,ok,64763401,116926702,171856986,116926.7,8552.4
+control.select_pick,control,select picks first item,script,20,ok,8533867,18667895,20390410,933394.8,1071.4
+funcs.call_empty,funcs,call empty function,loop,8000,ok,220696961,421044624,823572059,52630.6,19000.4
+funcs.call_args,funcs,call with 4 args,loop,5000,ok,165331655,166777414,288070158,33355.5,29980.1
+funcs.call_local,funcs,call with local assign,loop,5000,ok,273302987,320977012,517854767,64195.4,15577.4
+funcs.call_local_arith,funcs,local + arithmetic,loop,3000,ok,266493178,315565030,366565717,105188.3,9506.8
+funcs.call_return_code,funcs,return code path,loop,5000,ok,214673121,220823271,469600241,44164.7,22642.5
+funcs.call_shift_args,funcs,shift inside function,loop,3000,ok,114454021,115924309,215046962,38641.4,25879.0
+funcs.call_nested3,funcs,3-deep call chain,loop,3000,ok,164755930,215392731,267842733,71797.6,13928.0
+funcs.call_in_subst,funcs,function call in $(),loop,500,ok,114517316,117018500,215616297,234037.0,4272.8
+funcs.recursive_fib15,funcs,recursive fib(15),script,1,ok,819611886,1177615113,1277695215,1177615113.0,0.8
+funcs.redefine,funcs,function redefinition,loop,3000,ok,34742578,114845700,118667024,38281.9,26122.0
+funcs.declare_f_dump,funcs,declare -f dump,loop,3000,ok,115119731,115976557,166614700,38658.9,25867.3
+funcs.export_f,funcs,export -f + child shell call,loop,200,ok,972542490,1169211582,1427065776,5846057.9,171.1
+subst.cmd_builtin_echo,subst,$(echo) builtin capture,loop,3000,ok,115030968,167525086,217359483,55841.7,17907.8
+subst.cmd_true,subst,$(true),loop,1000,ok,33822748,120223450,166382811,120223.4,8317.8
+subst.cmd_self,subst,$($BASH -c) self spawn,loop,100,ok,418383591,617780837,1177111768,6177808.4,161.9
+subst.cmd_ext_date,subst,$(date) external spawn,loop,100,ok,214843156,269862744,422624385,2698627.4,370.6
+subst.cmd_nested2,subst,two-level nesting,loop,200,ok,64436189,66452215,118673925,332261.1,3009.7
+subst.cmd_big_output,subst,capture 200 lines,loop,50,ok,114672440,167986107,221010933,3359722.1,297.6
+subst.cmd_assign_trim,subst,capture + trailing strip,loop,300,ok,115054232,165984344,223257434,553281.1,1807.4
+subst.backquote_echo,subst,`echo` backquotes,loop,1800,ok,64388889,67301029,116306732,37389.5,26745.5
+subst.procsub_cat,subst,cat <(echo) process substitution,loop,100,ok,117030569,315713302,322338886,3157133.0,316.7
+subst.procsub_read,subst,read loop over <(printf),loop,100,ok,271871599,368260060,478557564,3682600.6,271.5
+subst.procsub_two,subst,diff-style two procsubs to cat,loop,100,ok,377873276,674150612,1407498651,6741506.1,148.3
+subst.arith_nested_subst,subst,$(( $(...) )) nesting,loop,1200,ok,65446996,115229937,171784508,96024.9,10414.0
+subst.subshell_assign,subst,( ) subshell with assigns,loop,500,ok,114408193,165722851,307947919,331445.7,3017.1
+subst.subshell_pipe,subst,subshell in pipeline,loop,100,ok,367823324,373891971,419565975,3738919.7,267.5
+redir.devnull_write,redir,echo >/dev/null,loop,5000,ok,114463726,224346859,369788263,44869.4,22286.9
+redir.file_append,redir,echo >>file append,loop,2000,ok,115761785,166995290,331675017,83497.6,11976.4
+redir.file_truncate_write,redir,echo >file per iter,loop,1000,ok,118567555,164571273,175201756,164571.3,6076.4
+redir.stderr_merge,redir,2>&1 merge,loop,3000,ok,167171175,216259031,216838341,72086.3,13872.3
+redir.both_to_file,redir,&>file both streams,loop,3000,ok,216472422,271366992,420135229,90455.7,11055.1
+redir.heredoc_small,redir,heredoc 3 lines to cat,loop,500,ok,33832602,115901013,166130443,231802.0,4314.0
+redir.heredoc_expand,redir,heredoc with expansion,loop,500,ok,68442933,116778430,167507550,233556.9,4281.6
+redir.herestring_cat,redir,herestring to cat,loop,500,ok,35522109,73971660,116377808,147943.3,6759.3
+redir.herestring_read,redir,herestring into read,loop,9000,ok,315915326,374305582,439359899,41589.5,24044.5
+redir.fd_open_close,redir,exec fd open + close,loop,2000,ok,116172370,217044179,316075066,108522.1,9214.7
+redir.fd_dup_write,redir,write via dup fd,loop,3000,ok,64367587,64923441,88275025,21641.1,46208.3
+redir.input_redirect_read,redir,read <file,loop,4000,ok,215934755,283005318,327752220,70751.3,14134.0
+redir.pipe_two_builtin,redir,builtin | builtin pipeline,loop,300,ok,64617982,166989953,218725613,556633.2,1796.5
+redir.pipe_two_ext,redir,echo | cat pipeline,loop,1200,ok,120457211,135352564,233689730,112793.8,8865.7
+redir.pipe_three_ext,redir,three-stage pipeline,loop,900,ok,166508490,222649251,381807490,247388.1,4042.2
+redir.pipe_data_10k,redir,10k lines through two cats,script,10000,ok,8486415,16081374,64743691,1608.1,621837.4
+redir.clobber_guard,redir,noclobber拒 overwrite attempt cost,loop,1000,ok,120357922,240293590,391547618,240293.6,4161.6
+redir.devfull_nowhere,redir,write to /dev/null via fd var,loop,3000,ok,116498119,224002472,273156538,74667.5,13392.7
+glob.star_txt@200,glob,*.txt expansion (200 matches),script,200,ok,8208368,11795662,68208671,58978.3,16955.4
+glob.star_all@300,glob,* expansion (300 matches),script,300,ok,39666237,73726712,84355813,245755.7,4069.1
+glob.question@200,glob,?.txt pattern,script,200,ok,4798541,8211423,11651034,41057.1,24356.3
+glob.bracket@200,glob,[ab]*.txt bracket pattern,script,200,ok,16667262,21336479,34164631,106682.4,9373.6
+glob.starstar@300,glob,** recursive globstar,script,250,ok,7892975,16076776,34239193,64307.1,15550.4
+glob.nomatch_plain,glob,no-match literal passthrough,loop,300,ok,77953455,119219713,167595371,397399.0,2516.4
+glob.nomatch_nullglob,glob,no-match with nullglob,loop,1000,ok,220193596,522465437,667363216,522465.4,1914.0
+glob.assign_array@200,glob,array from glob,loop,200,ok,115486231,228859290,320708159,1144296.4,873.9
+glob.extglob_plus,glob,extglob +(a|b),script,200,ok,16267652,33112512,35167106,165562.6,6040.0
+glob.extglob_neg,glob,extglob !(...) exclusion,script,200,ok,9593026,20603099,33384951,103015.5,9707.3
+glob.case_pattern,glob,case with glob patterns,loop,5000,ok,114721032,118364501,167404285,23672.9,42242.4
+glob.dotfiles,glob,dotglob expansion,loop,900,ok,115633482,167775161,292455810,186416.8,5364.3
+cond.dbracket_str_eq,cond,[[ == ]],loop,5000,ok,114843447,117925862,165887428,23585.2,42399.5
+cond.dbracket_str_ne,cond,[[ != ]],loop,5000,ok,64513385,65888189,116997589,13177.6,75886.1
+cond.dbracket_int_chain,cond,[[ -lt && -gt ]],loop,5000,ok,115057708,123666396,234998112,24733.3,40431.4
+cond.dbracket_or,cond,[[ || ]],loop,15000,ok,215128434,317272883,395965027,21151.5,47277.9
+cond.dbracket_not,cond,[[ ! -e ]],loop,15000,ok,215681364,265151124,428318340,17676.7,56571.5
+cond.dbracket_file_e,cond,[[ -e file ]],loop,15000,ok,168982503,327961063,426396475,21864.1,45737.1
+cond.dbracket_file_f,cond,[[ -f file ]],loop,15000,ok,215528074,267527711,429982807,17835.2,56069.0
+cond.dbracket_file_d,cond,[[ -d dir ]],loop,5000,ok,69071005,114890927,175356628,22978.2,43519.5
+cond.dbracket_file_s,cond,[[ -s nonempty ]],loop,6000,ok,172795695,219530020,372290589,36588.3,27331.1
+cond.dbracket_v_var,cond,[[ -v var ]],loop,10000,ok,168334881,215334093,470204809,21533.4,46439.5
+cond.dbracket_v_unset,cond,[[ -v unset ]],loop,5000,ok,114928204,173746963,316335686,34749.4,28777.5
+cond.dbracket_o_opt,cond,[[ -o opt ]],loop,5000,ok,64533026,114387742,164771544,22877.5,43711.0
+cond.dbracket_regex_var,cond,[[ =~ $re ]] regex from variable,loop,3000,ok,64299464,115091959,168086318,38364.0,26066.1
+cond.dbracket_pattern_var,cond,[[ == $pat ]] pattern from variable,loop,9000,ok,167272657,216976548,275375949,24108.5,41479.1
+cond.bracket_combo,cond,[ ] -a combo,loop,6000,ok,114434603,165651314,277009910,27608.6,36220.7
+cond.bracket_o_combo,cond,[ ] -o combo,loop,3000,ok,64408378,114606130,165925155,38202.0,26176.6
+cond.test_file_newer,cond,test -nt,loop,2000,ok,35362119,65182720,115337958,32591.4,30683.0
+cond.dbracket_arith_cmp,cond,[[ a -eq b ]] vars,loop,5000,ok,65886847,136866396,187043607,27373.3,36532.0
+jobs.bg_wait_one,jobs,one bg job + wait,script,1,ok,78661257,83417505,120457582,83417505.0,12.0
+jobs.bg_many@20,jobs,20 bg jobs + wait,script,20,ok,114947392,116501114,118799754,5825055.7,171.7
+jobs.bg_pid_capture,jobs,bg spawn + $! capture loop,script,50,ok,416900024,467880901,470381074,9357618.0,106.9
+jobs.kill_term,jobs,"spawn, kill -TERM, wait",script,1,ok,16163266,17808135,33622437,17808135.0,56.2
+jobs.kill_check_loop,jobs,kill -0 poll loop,script,1,ok,217003959,267019809,286568735,267019809.0,3.7
+jobs.jobs_list_live,jobs,jobs output with live jobs,script,2,ok,322618545,368842614,370106160,184421307.0,5.4
+jobs.disown_one,jobs,bg + disown,script,1,ok,8805414,16619461,17298650,16619461.0,60.2
+jobs.trap_set_clear,jobs,trap install + clear (loop),loop,2000,ok,65804032,117722106,190123359,58861.1,16989.2
+jobs.trap_raise@200,jobs,trap delivery: raise USR1 x200,script,200,ok,15907102,16716296,66145134,83581.5,11964.4
+jobs.trap_exit,jobs,EXIT trap execution,process,1,ok,3665581,7993616,8694428,7993616,125.1
+jobs.trap_debug_stmt,jobs,DEBUG trap per statement,loop,1000,ok,114932860,121545724,136201418,121545.7,8227.4
+jobs.sigpipe_shape,jobs,yes-style pipe early close (head builtin-side),script,1,ok,8172365,10439607,20727315,10439607.0,95.8
+data.printf_bulk@10000,data,printf 10k formatted lines,script,10000,ok,595765299,654632871,729107225,65463.3,15275.7
+data.echo_bulk@10000,data,echo 10k lines,script,10000,ok,304025453,351825126,442473703,35182.5,28423.2
+data.declare_p_assoc@10000,data,declare -p 10k-entry assoc,script,1,ok,275802498,501912393,570721215,501912393.0,2.0
+data.declare_p_array@10000,data,declare -p 10k-element array,script,1,ok,251532537,290049499,298023215,290049499.0,3.4
+data.env_dump,data,env output with 500 vars,script,500,ok,32298390,34022578,123027939,68045.2,14696.1
+data.set_dump,data,set output with 500 vars + functions,script,500,ok,16436347,34904171,76501796,69808.3,14324.9
+data.string_growth@50000,data,string += growth to ~350KB,script,50000,ok,2142456556,2803394169,3516640792,56067.9,17835.5
+data.array_growth_read@100000,data,read 100k lines into vars,script,100000,ok,6559960328,7268905656,7823785156,72689.1,13757.2
+data.wc_style_count@100000,data,count words via read -a over 100k lines,script,100000,ok,5283987098,7496981170,7598943355,74969.8,13338.7
+data.kv_parse@50000,data,parse 50k key=value lines with ${} ops,script,50000,ok,5319128595,6084531409,6576059759,121690.6,8217.6
+mixed.log_tally@20000,mixed,log tally: count by 3rd field (assoc),script,20000,ok,1903551780,2955679434,3289491838,147784.0,6766.6
+mixed.config_parse@2000,mixed,config parse: kv + path building,script,2000,ok,232188827,267281481,565492788,133640.7,7482.7
+mixed.name_transform@5000,mixed,filename transform over path list,script,5000,ok,900374607,993922435,1651371232,198784.5,5030.6
+mixed.report_table@2000,mixed,formatted report table via printf,script,2000,ok,115646932,120595077,195916913,60297.5,16584.4
+mixed.token_machine@10000,mixed,token state machine over csv,script,10000,ok,781812480,1552195628,1804406202,155219.6,6442.5
+mixed.field_extract@20000,mixed,field extraction via ${} surgery,script,20000,ok,2193582812,2461506666,2651990746,123075.3,8125.1
+mixed.dispatch_loop@5000,mixed,command dispatch loop (case + funcs),script,5000,ok,445913064,481524075,651773490,96304.8,10383.7
+mixed.arg_parse@1000,mixed,hand-rolled CLI arg parsing loop,script,1000,ok,8116731,8471714,8901458,8471.7,118039.9
+expand.param_plain,expand,parameter expansion: plain $v,loop,15000,ok,194256792,254006790,365660909,16933.8,59053.5
+expand.param_braced,expand,parameter expansion: braced ${v},loop,5000,ok,114921283,135659164,149351653,27131.8,36857.1
+expand.param_length_str,expand,parameter expansion: ${#v} string length,loop,5000,ok,135900787,168741041,196057754,33748.2,29631.2
+expand.param_length_arr,expand,parameter expansion: ${#a[@]} array length,loop,5000,ok,116572280,168508312,234089960,33701.7,29672.1
+expand.param_default_unset,expand,parameter expansion: ${u:-def} unset,loop,5000,ok,169539438,189845672,230844299,37969.1,26337.2
+expand.param_default_set,expand,parameter expansion: ${v:-def} set,loop,5000,ok,149396250,182569012,198476124,36513.8,27386.9
+expand.param_default_assign,expand,parameter expansion: ${u:=def},loop,5000,ok,114373130,137592026,247706364,27518.4,36339.3
+expand.param_default_err_ok,expand,parameter expansion: ${v:?} set,loop,5000,ok,143421264,167046648,216761996,33409.3,29931.8
+expand.param_alt_set,expand,parameter expansion: ${v:+alt} set,loop,5000,ok,116150298,182878066,190094176,36575.6,27340.6
+expand.param_alt_unset,expand,parameter expansion: ${u:+alt} unset,loop,5000,ok,116211379,133023969,150410893,26604.8,37587.2
+expand.param_substr_s,expand,parameter expansion: ${v:2:4} substring,loop,5000,ok,117114975,197621642,250407868,39524.3,25300.9
+expand.param_substr_l,expand,parameter expansion: ${v:2:4} substring,loop,5000,ok,115150076,164668820,250080808,32933.8,30364.0
+expand.param_substr_neg_s,expand,parameter expansion: ${v: -3} negative offset,loop,5000,ok,167193018,194027808,201676687,38805.6,25769.5
+expand.param_substr_neg_l,expand,parameter expansion: ${v: -3} negative offset,loop,5000,ok,166916542,185000371,186944709,37000.1,27027.0
+expand.param_substr_from_s,expand,parameter expansion: ${v:5} from offset,loop,5000,ok,118793895,133621296,250122100,26724.3,37419.2
+expand.param_substr_from_l,expand,parameter expansion: ${v:5} from offset,loop,5000,ok,114942565,148904061,229798049,29780.8,33578.7
+expand.param_prefix_rm_short,expand,parameter expansion: ${v#*/} shortest prefix,loop,5000,ok,145589517,166064103,195907159,33212.8,30108.9
+expand.param_prefix_rm_long,expand,parameter expansion: ${v##*/} longest prefix,loop,5000,ok,116863338,220920767,232139062,44184.2,22632.5
+expand.param_suffix_rm_short_s,expand,parameter expansion: ${v%.*} shortest suffix,loop,5000,ok,149950311,199893521,230497439,39978.7,25013.3
+expand.param_suffix_rm_short_l,expand,parameter expansion: ${v%.*} shortest suffix,loop,5000,ok,119411311,195003142,249918123,39000.6,25640.6
+expand.param_suffix_rm_long_s,expand,parameter expansion: ${v%%.*} longest suffix,loop,5000,ok,115151659,167342732,241606870,33468.5,29878.8
+expand.param_suffix_rm_long_l,expand,parameter expansion: ${v%%.*} longest suffix,loop,5000,ok,149705334,242408974,383280040,48481.8,20626.3
+expand.param_replace_first_s,expand,parameter expansion: ${v/x/y} first,loop,5000,ok,149453155,216526863,233870911,43305.4,23091.8
+expand.param_replace_first_l,expand,parameter expansion: ${v/x/y} first,loop,5000,ok,115274803,186144858,233885583,37229.0,26860.8
+expand.param_replace_all_s,expand,parameter expansion: ${v//x/y} all,loop,5000,ok,149791913,170675643,278891143,34135.1,29295.3
+expand.param_replace_all_l,expand,parameter expansion: ${v//x/y} all,loop,5000,ok,149886836,185178599,240857777,37035.7,27001.0
+expand.param_replace_prefix_s,expand,parameter expansion: ${v/#pre} anchored head,loop,5000,ok,216448025,217253854,249477302,43450.8,23014.6
+expand.param_replace_prefix_l,expand,parameter expansion: ${v/#pre} anchored head,loop,5000,ok,191222379,201921495,297948383,40384.3,24762.1
+expand.param_replace_suffix_s,expand,parameter expansion: ${v/%suf} anchored tail,loop,5000,ok,168416393,199716245,298048163,39943.2,25035.5
+expand.param_replace_suffix_l,expand,parameter expansion: ${v/%suf} anchored tail,loop,5000,ok,220889259,271286932,289975958,54257.4,18430.7
+expand.param_upper_first_s,expand,parameter expansion: ${v^} upper first,loop,5000,ok,125642522,181555011,189076678,36311.0,27539.9
+expand.param_upper_first_l,expand,parameter expansion: ${v^} upper first,loop,5000,ok,116592030,147926073,187074544,29585.2,33800.7
+expand.param_upper_all_s,expand,parameter expansion: ${v^^} upper all,loop,5000,ok,119093615,199729015,215979641,39945.8,25033.9
+expand.param_upper_all_l,expand,parameter expansion: ${v^^} upper all,loop,5000,ok,115025540,116628635,223150223,23325.7,42871.1
+expand.param_lower_first,expand,"parameter expansion: ${v,} lower first",loop,5000,ok,169601842,190768888,240329414,38153.8,26209.7
+expand.param_lower_all,expand,"parameter expansion: ${v,,} lower all",loop,5000,ok,115572900,184582133,242849926,36916.4,27088.2
+expand.param_indirect,expand,parameter expansion: ${!n} indirect,loop,5000,ok,154660440,284249405,300065210,56849.9,17590.2
+expand.param_nameref_read,expand,parameter expansion: nameref read,loop,5000,ok,66248209,133752754,149676740,26750.6,37382.4
+expand.param_positional,expand,parameter expansion: $1 positional,loop,5000,ok,89521605,121234988,138883774,24247.0,41242.2
+expand.param_special_status,expand,parameter expansion: $? status,loop,5000,ok,116412681,130918891,181455621,26183.8,38191.6
+expand.param_special_pid,expand,parameter expansion: $$ pid,loop,10000,ok,116752581,167137594,360751582,16713.8,59830.9
+expand.param_special_opts,expand,parameter expansion: $- flags,loop,5000,ok,83269773,117660213,199989014,23532.0,42495.2
+expand.param_special_argc,expand,parameter expansion: $# argc,loop,5000,ok,115441173,124700569,149896140,24940.1,40096.0
+expand.param_at_join,expand,"parameter expansion: ""${a[@]}"" join-read",loop,5000,ok,127299058,168489904,207991093,33698.0,29675.4
+expand.param_at_elem,expand,parameter expansion: ${a[2]} element,loop,5000,ok,131493183,148494386,167898016,29698.9,33671.3
+expand.param_star_join,expand,"parameter expansion: ""${a[*]}"" star",loop,5000,ok,133350269,200281995,202164399,40056.4,24964.8
+expand.param_keys,expand,parameter expansion: ${!a[@]} indices,loop,5000,ok,165476572,243732471,289088327,48746.5,20514.3
+expand.param_assoc_read,expand,parameter expansion: assoc ${m[k]},loop,5000,ok,197521892,202393503,281416182,40478.7,24704.4
+expand.param_assoc_keys,expand,parameter expansion: ${!m[@]} assoc keys,loop,5000,ok,149732224,300031849,336409251,60006.4,16664.9
+expand.param_quoted_at_len,expand,"parameter expansion: ""${#a[@]}"" quoted",loop,5000,ok,133947746,165195239,200614293,33039.0,30267.2
+builtin.echo_plain,builtin,builtin echo: echo literal,loop,9000,ok,247640144,288482007,292883792,32053.6,31197.8
+builtin.echo_var,builtin,builtin echo: echo variable,loop,3000,ok,83909934,149157511,200758680,49719.2,20113.0
+builtin.echo_n_flag,builtin,builtin echo: echo -n,loop,3000,ok,82249172,167843844,192001047,55947.9,17873.8
+builtin.echo_e_escapes,builtin,builtin echo: echo -e escapes,loop,9000,ok,337852317,427854364,468139049,47539.4,21035.2
+builtin.printf_fmt_s,builtin,builtin printf: printf %s,loop,3000,ok,143603516,166340047,182829333,55446.7,18035.3
+builtin.printf_fmt_nums,builtin,builtin printf: printf %d %f,loop,2000,ok,118397800,151354068,193100957,75677.0,13214.0
+builtin.printf_v_assign,builtin,builtin printf: printf -v,loop,3000,ok,64545213,90583510,138139337,30194.5,33118.6
+builtin.printf_reuse,builtin,builtin printf: printf format reuse,loop,2000,ok,64296780,167257314,217636147,83628.7,11957.6
+builtin.test_str_eq,builtin,builtin test: test string =,loop,5000,ok,120634847,128770777,214662035,25754.2,38828.7
+builtin.test_int_lt,builtin,builtin test: test int -lt,loop,10000,ok,167473609,249775089,300298821,24977.5,40036.0
+builtin.test_file_t,builtin,builtin test: test -e file,loop,3000,ok,64113696,82230604,186216487,27410.2,36482.8
+builtin.test_unary_z,builtin,builtin test: test -z,loop,5000,ok,114543907,167901160,214553542,33580.2,29779.4
+builtin.bracket_expr,builtin,builtin bracket: [ ] expression,loop,5000,ok,133973195,136564474,164967388,27312.9,36612.7
+builtin.declare_assign,builtin,builtin declare: declare assign,loop,5000,ok,366049182,400416988,546913846,80083.4,12487.0
+builtin.declare_local_like,builtin,builtin declare: declare -i arithmetic,loop,3000,ok,400948065,527504849,1004077244,175834.9,5687.2
+builtin.declare_print,builtin,builtin declare: declare -p,loop,1000,ok,120468237,193716892,229261695,193716.9,5162.2
+builtin.local_in_func,builtin,builtin local: local in function,loop,5000,ok,298996305,473070800,504375509,94614.2,10569.2
+builtin.typeset_assign,builtin,builtin typeset: typeset assign,loop,5000,ok,284498889,466316383,502474877,93263.3,10722.3
+builtin.export_assign,builtin,builtin export: export assign,loop,3000,ok,65186305,66622000,134057991,22207.3,45030.2
+builtin.unset_var,builtin,builtin unset: unset var,loop,9000,ok,164931404,184987912,200263337,20554.2,48651.8
+builtin.readonly_set,builtin,builtin readonly: readonly set,loop,1000,ok,64280857,65395349,75512582,65395.3,15291.6
+builtin.shift_one,builtin,builtin shift: shift,loop,6000,ok,114533541,117194384,182095502,19532.4,51197.0
+builtin.getopts_parse,builtin,builtin getopts: getopts loop,loop,1000,ok,114891378,181898707,252302562,181898.7,5497.6
+builtin.cd_dot,builtin,builtin cd: cd .,loop,6000,ok,114306710,114992320,125440209,19165.4,52177.4
+builtin.pwd_plain,builtin,builtin pwd: pwd,loop,6000,ok,114653221,124570484,176237761,20761.7,48165.5
+builtin.pwd_subst,builtin,builtin pwd: pwd in $(),loop,6000,ok,180259646,217865862,218935839,36311.0,27539.9
+builtin.type_builtin,builtin,builtin type: type echo,loop,5000,ok,114529916,118593634,180363683,23718.7,42160.8
+builtin.hash_lookup,builtin,builtin hash: hash lookup,loop,6000,ok,234060967,285145109,317260745,47524.2,21041.9
+builtin.command_v,builtin,builtin command: command -v,loop,5000,ok,114933641,118388266,265182181,23677.7,42233.9
+builtin.command_run,builtin,builtin command: command true,loop,18000,ok,214533592,235833166,283772970,13101.8,76325.1
+builtin.builtin_run,builtin,builtin builtin: builtin true,loop,5000,ok,64088428,66590793,115274072,13318.2,75085.5
+builtin.true_plain,builtin,builtin true: true,loop,20000,ok,169992188,215974825,434428590,10798.7,92603.4
+builtin.false_plain,builtin,builtin false: false (rc ignored),loop,20000,ok,183854952,214965991,235973697,10748.3,93038.0
+builtin.colon_plain,builtin,builtin colon: : no-op,loop,120000,ok,65550012,68087609,116895976,567.4,1762435.2
+builtin.eval_simple,builtin,builtin eval: eval assignment,loop,2000,ok,64995339,66868850,151168700,33434.4,29909.3
+builtin.eval_concat,builtin,builtin eval: eval concat args,loop,3000,ok,179664814,193712185,220421848,64570.7,15486.9
+builtin.exec_redir_only,builtin,builtin exec: exec redirect open/close,loop,2000,ok,64251994,115182355,115466472,57591.2,17363.8
+builtin.jobs_list,builtin,builtin jobs: jobs empty,loop,9000,ok,183526369,216339822,316145161,24037.8,41601.2
+builtin.wait_none,builtin,builtin wait: wait no jobs,loop,6000,ok,64142008,66896552,83818657,11149.4,89690.7
+builtin.kill_l_list,builtin,builtin kill: kill -l,loop,5000,ok,114713962,132498521,181504255,26499.7,37736.3
+builtin.ulimit_read,builtin,builtin ulimit: ulimit -n read,loop,6000,ok,117840394,164917302,188759843,27486.2,36381.9
+builtin.umask_read,builtin,builtin umask: umask read,loop,9000,ok,166726387,219504672,265820639,24389.4,41001.4
+builtin.shopt_query,builtin,builtin shopt: shopt set/query/unset,loop,3000,ok,165317502,214512661,269294031,71504.2,13985.2
+builtin.set_query,builtin,builtin set: set -o query,loop,3000,ok,65963772,116395706,134006895,38798.6,25774.1
+builtin.alias_define,builtin,builtin alias: alias define+unalias,loop,1000,ok,31984309,32665691,41784807,32665.7,30613.2
+builtin.history_list,builtin,builtin history: history builtin (non-interactive),loop,2500,ok,64625053,85168063,120362739,34067.2,29353.7
+builtin.enable_list,builtin,builtin enable: enable -a list,loop,5000,ok,114777597,135048228,193527628,27009.6,37023.8
+builtin.help_one,builtin,builtin help: help echo,loop,6000,ok,165693988,199994893,253758677,33332.5,30000.8
+builtin.let_simple,builtin,builtin let: let a=1+2,loop,15000,ok,217429898,266044224,286440954,17736.3,56381.6
+builtin.let_multi,builtin,builtin let: let multi,loop,3000,ok,65167728,83965167,118086974,27988.4,35729.1
+builtin.return_in_func,builtin,builtin return: return from function,loop,5000,ok,164844974,185813952,243069366,37162.8,26908.6
+builtin.break_loop,builtin,builtin break: break inner,loop,3000,ok,114407221,132986413,169313590,44328.8,22558.7
+builtin.continue_loop,builtin,builtin continue: continue inner,loop,3000,ok,114303586,166926137,217348997,55642.0,17972.0
+builtin.mapfile_small,builtin,builtin mapfile: mapfile from procsub,loop,200,ok,215334764,280000858,365700178,1400004.3,714.3
+builtin.readarray_small,builtin,builtin readarray: readarray,loop,200,ok,215390297,233054175,265562802,1165270.9,858.2
+builtin.read_line,builtin,builtin read: read one line,loop,1000,ok,66574548,129928674,195758867,129928.7,7696.5
+builtin.read_fields,builtin,builtin read: read fields IFS split,loop,2000,ok,114645288,123494339,268101512,61747.2,16195.1
+builtin.read_array,builtin,builtin read: read -a split,loop,6000,ok,114326541,114814322,181661581,19135.7,52258.3
+builtin.read_d_delim,builtin,builtin read: read -d '',loop,200,ok,64390982,116607684,118095867,583038.4,1715.2
+builtin.kill_zero_self,builtin,builtin kill: kill -0 self liveness,loop,6000,ok,64337211,120310060,167555331,20051.7,49871.1
+builtin.times_plain,builtin,builtin times: times,loop,6000,ok,117778000,130817729,182525076,21803.0,45865.3
+builtin.caller_in_func,builtin,builtin caller: caller in function,loop,6000,ok,233738583,268884657,301517319,44814.1,22314.4
+builtin.compgen_word,builtin,builtin compgen: compgen -W,loop,1000,ok,32544600,64903671,67872857,64903.7,15407.4
+builtin.complete_list,builtin,builtin complete: complete -p list-ish,loop,5000,ok,165195790,183001061,184761242,36600.2,27322.2
+builtin.fc_list,builtin,builtin fc: fc -l with seeded history,loop,4200,ok,114303415,118409818,165965675,28192.8,35470.0
+builtin.popd_pair,builtin,builtin popd: pushd/popd pair,loop,3000,ok,164686295,165676641,186799441,55225.5,18107.6
+builtin.dirs_list,builtin,builtin dirs: dirs,loop,3000,ok,64244533,68537574,115899151,22845.9,43771.6
+builtin.bgfg_job_cycle,builtin,builtin bgfg: spawn + wait cycle,loop,100,ok,667545559,669065270,770478621,6690652.7,149.5
+arith.expand_add,arith,arith $(( )): a + b,loop,8000,ok,115003717,180062170,215268875,22507.8,44429.1
+arith.cmd_add,arith,arith (( )): a + b,loop,8000,ok,115346591,117005761,216986563,14625.7,68372.7
+arith.expand_sub,arith,arith $(( )): a - b,loop,8000,ok,114372099,171878169,320197061,21484.8,46544.6
+arith.cmd_sub,arith,arith (( )): a - b,loop,16000,ok,165876702,224040279,368523896,14002.5,71415.7
+arith.expand_mul,arith,arith $(( )): a * b,loop,8000,ok,116840062,174502527,273875918,21812.8,45844.6
+arith.cmd_mul,arith,arith (( )): a * b,loop,8000,ok,114707342,130294404,434665776,16286.8,61399.4
+arith.expand_div,arith,arith $(( )): a / b,loop,8000,ok,114734102,169840882,269293620,21230.1,47102.9
+arith.cmd_div,arith,arith (( )): a / b,loop,8000,ok,114539250,116618400,118700845,14577.3,68599.8
+arith.expand_mod,arith,arith $(( )): a % b,loop,8000,ok,114616135,119213645,180469972,14901.7,67106.4
+arith.cmd_mod,arith,arith (( )): a % b,loop,8000,ok,114362955,116264488,168599208,14533.1,68808.6
+arith.expand_pow,arith,arith $(( )): a ** 3,loop,8000,ok,117280483,165056972,167344024,20632.1,48468.1
+arith.cmd_pow,arith,arith (( )): a ** 3,loop,8000,ok,114484437,115442765,269150746,14430.3,69298.4
+arith.expand_shl,arith,arith $(( )): a << 3,loop,8000,ok,116661754,164465455,268479398,20558.2,48642.4
+arith.cmd_shl,arith,arith (( )): a << 3,loop,24000,ok,221951354,266236302,315183487,11093.2,90145.5
+arith.expand_shr,arith,arith $(( )): a >> 2,loop,8000,ok,116272741,166316422,221876562,20789.6,48101.1
+arith.cmd_shr,arith,arith (( )): a >> 2,loop,8000,ok,64545935,114474923,168399588,14309.4,69884.3
+arith.expand_band,arith,arith $(( )): a & b,loop,8000,ok,165781028,174633713,222225796,21829.2,45810.2
+arith.cmd_band,arith,arith (( )): a & b,loop,8000,ok,114478768,115232190,116131520,14404.0,69425.0
+arith.expand_bor,arith,arith $(( )): a | b,loop,8000,ok,115214913,166510544,182328392,20813.8,48045.0
+arith.cmd_bor,arith,arith (( )): a | b,loop,8000,ok,115084167,116032641,123785736,14504.1,68946.1
+arith.expand_bxor,arith,arith $(( )): a ^ b,loop,8000,ok,165530893,170005979,222827529,21250.7,47057.2
+arith.cmd_bxor,arith,arith (( )): a ^ b,loop,8000,ok,114682164,115968575,119200835,14496.1,68984.2
+arith.expand_bnot,arith,arith $(( )): ~a,loop,8000,ok,164607117,167301210,217382377,20912.7,47817.9
+arith.cmd_bnot,arith,arith (( )): ~a,loop,8000,ok,66868219,115371108,224098286,14421.4,69341.5
+arith.expand_neg,arith,arith $(( )): -a,loop,8000,ok,115544197,117153483,165907348,14644.2,68286.5
+arith.cmd_neg,arith,arith (( )): -a,loop,8000,ok,114664919,115125590,124246578,14390.7,69489.3
+arith.expand_lt,arith,arith $(( )): a < b,loop,8000,ok,114591919,177418884,271444368,22177.4,45091.0
+arith.cmd_lt,arith,arith (( )): a < b,loop,8000,ok,64587347,114323566,166154158,14290.4,69976.8
+arith.expand_le,arith,arith $(( )): a <= b,loop,8000,ok,123835541,165462230,167036933,20682.8,48349.4
+arith.cmd_le,arith,arith (( )): a <= b,loop,8000,ok,119281025,166984385,170077306,20873.0,47908.7
+arith.expand_gt,arith,arith $(( )): a > b,loop,8000,ok,115132340,167712016,216184038,20964.0,47700.8
+arith.cmd_gt,arith,arith (( )): a > b,loop,8000,ok,115418239,117870349,167858807,14733.8,67871.2
+arith.expand_eq,arith,arith $(( )): a == b,loop,8000,ok,169073199,221103922,324729063,27638.0,36182.1
+arith.cmd_eq,arith,arith (( )): a == b,loop,8000,ok,114956526,115720652,119957761,14465.1,69132.0
+arith.expand_ne,arith,arith $(( )): a != b,loop,8000,ok,114413350,179519326,219333955,22439.9,44563.4
+arith.cmd_ne,arith,arith (( )): a != b,loop,8000,ok,65608189,115525579,119024882,14440.7,69248.7
+arith.expand_land,arith,arith $(( )): a && b,loop,8000,ok,115905700,164919165,167604845,20614.9,48508.6
+arith.cmd_land,arith,arith (( )): a && b,loop,8000,ok,68088641,116543577,169901412,14567.9,68643.9
+arith.expand_lor,arith,arith $(( )): a || 0,loop,8000,ok,121084081,166194860,177285793,20774.4,48136.3
+arith.cmd_lor,arith,arith (( )): a || 0,loop,8000,ok,75587044,116169456,166130593,14521.2,68864.9
+arith.expand_ternary,arith,arith $(( )): a>b ? a : b,loop,8000,ok,166650874,228251929,327826431,28531.5,35049.0
+arith.cmd_ternary,arith,arith (( )): a>b ? a : b,loop,8000,ok,79752075,166420539,234287927,20802.6,48071.0
+arith.expand_preinc,arith,arith $(( )): ++c,loop,8000,ok,264657914,278366476,421788631,34795.8,28739.1
+arith.cmd_preinc,arith,arith (( )): ++c,loop,8000,ok,118794426,177905604,319273295,22238.2,44967.7
+arith.expand_postinc,arith,arith $(( )): c++,loop,8000,ok,167905076,218350259,229298340,27293.8,36638.4
+arith.cmd_postinc,arith,arith (( )): c++,loop,8000,ok,114484297,116033071,117616728,14504.1,68945.9
+arith.expand_predec,arith,arith $(( )): --c,loop,8000,ok,215755405,217532672,318052773,27191.6,36776.1
+arith.cmd_predec,arith,arith (( )): --c,loop,8000,ok,131539141,181797585,303952804,22724.7,44005.0
+arith.expand_assign_add,arith,arith $(( )): c += a,loop,8000,ok,216854395,272101775,319677562,34012.7,29400.8
+arith.cmd_assign_add,arith,arith (( )): c += a,loop,8000,ok,118861166,166659917,235102520,20832.5,48001.9
+arith.expand_assign_mul,arith,arith $(( )): c *= b,loop,8000,ok,167140449,173733513,231618591,21716.7,46047.5
+arith.cmd_assign_mul,arith,arith (( )): c *= b,loop,8000,ok,114545579,115695766,119763981,14462.0,69146.9
+arith.expand_assign_mod,arith,arith $(( )): c %= b,loop,8000,ok,114470036,117464580,169189694,14683.1,68105.6
+arith.cmd_assign_mod,arith,arith (( )): c %= b,loop,8000,ok,115096777,125005727,216693383,15625.7,63997.1
+arith.expand_comma,arith,"arith $(( )): a, b, a+b",loop,8000,ok,164717903,215529476,299873942,26941.2,37117.9
+arith.cmd_comma,arith,"arith (( )): a, b, a+b",loop,8000,ok,115296877,169494621,296600780,21186.8,47199.1
+arith.expand_nested,arith,arith $(( )): ((a+b)*(a-b)),loop,8000,ok,199194122,229046902,336427239,28630.9,34927.3
+arith.cmd_nested,arith,arith (( )): ((a+b)*(a-b)),loop,8000,ok,140285988,167549522,265171304,20943.7,47747.1
+arith.expand_func_free_mix,arith,arith $(( )): mixed chain,loop,8000,ok,135475148,199964518,233651161,24995.6,40007.1
+arith.cmd_func_free_mix,arith,arith (( )): mixed chain,loop,8000,ok,114391458,117730689,165425596,14716.3,67951.7
+arith.let_chain,arith,arith: let chain,loop,5000,ok,127292980,179357593,187175806,35871.5,27877.3
+arith.for_header,arith,arith: for((;;)) header arithmetic,loop,2000,ok,65002149,168510014,248390471,84255.0,11868.7
+arith.subscript_expr,arith,arith: array subscript expression,loop,5000,ok,316760545,335204833,428469466,67041.0,14916.3
+arith.base2,arith,arith: base#n literal 2#1010,loop,5000,ok,114329134,122810222,170769826,24562.0,40713.2
+arith.octal_hex,arith,arith: octal/hex literals,loop,5000,verify-failed,,,,,
+arith.big,arith,arith: 64-bit multiply,loop,5000,ok,66052636,116022525,181718275,23204.5,43095.1
+arith.shift_chain,arith,arith: shift chain,loop,8000,ok,115277478,184326861,273218621,23040.9,43401.2
+data.read_loop@10,data,data ladder: while read line loop (n=10),script,10,ok,4873043,8508609,23329411,850860.9,1175.3
+data.read_loop@1000,data,data ladder: while read line loop (n=1000),script,1000,ok,64479565,73411078,120394546,73411.1,13621.9
+data.read_loop@100000,data,data ladder: while read line loop (n=100000),script,100000,ok,5947039484,6160290161,6644653337,61602.9,16233.0
+data.read_mapfile@10,data,data ladder: mapfile whole file (n=10),script,10,ok,3745331,3788425,8972535,378842.5,2639.6
+data.read_mapfile@1000,data,data ladder: mapfile whole file (n=1000),script,1000,ok,7846655,8180937,16787292,8180.9,122235.4
+data.read_mapfile@100000,data,data ladder: mapfile whole file (n=100000),script,100000,ok,128532239,166238625,217612823,1662.4,601544.9
+data.read_ifs_fields@10,data,data ladder: read fields per line (n=10),script,10,ok,4982046,7780026,8069500,778002.6,1285.3
+data.read_ifs_fields@1000,data,data ladder: read fields per line (n=1000),script,1000,ok,65201188,114555514,134567887,114555.5,8729.4
+data.read_ifs_fields@100000,data,data ladder: read fields per line (n=100000),script,100000,ok,7357573721,7801990279,8452601374,78019.9,12817.2
+data.grep_builtin_loop@10,data,data ladder: pattern test per line (n=10),script,10,ok,16150587,17128314,19124990,1712831.4,583.8
+data.grep_builtin_loop@1000,data,data ladder: pattern test per line (n=1000),script,1000,ok,64998945,121581378,166775060,121581.4,8224.9
+data.grep_builtin_loop@100000,data,data ladder: pattern test per line (n=100000),script,100000,ok,7697284056,8092083233,8398458002,80920.8,12357.8
+data.sort_via_array@10,data,data ladder: array sort builtin loop (bubble-free: sort ext excluded; uses string join) (n=10),script,10,ok,4542947,4775737,10373698,477573.7,2093.9
+data.sort_via_array@1000,data,data ladder: array sort builtin loop (bubble-free: sort ext excluded; uses string join) (n=1000),script,1000,ok,8011072,8191984,16735695,8192.0,122070.6
+data.sort_via_array@100000,data,data ladder: array sort builtin loop (bubble-free: sort ext excluded; uses string join) (n=100000),script,100000,ok,216756037,272657218,428975195,2726.6,366760.9
+data.word_count_loop@10,data,data ladder: accumulate lengths (n=10),script,10,ok,7854177,8836281,13756435,883628.1,1131.7
+data.word_count_loop@1000,data,data ladder: accumulate lengths (n=1000),script,1000,ok,64631533,116068675,165993156,116068.7,8615.6
+data.word_count_loop@100000,data,data ladder: accumulate lengths (n=100000),script,100000,ok,4776335813,4882988157,7538594029,48829.9,20479.3
+data.assoc_fill@10,data,data ladder: assoc fill from kv file (n=10),script,10,ok,7625053,7725073,8019255,772507.3,1294.5
+data.assoc_fill@1000,data,data ladder: assoc fill from kv file (n=1000),script,1000,ok,64021898,64246035,65965575,64246.0,15565.2
+data.assoc_fill@100000,data,data ladder: assoc fill from kv file (n=100000),script,100000,ok,4676967650,4782375296,4979424960,47823.8,20910.1
+data.array_fill_lines@10,data,data ladder: indexed fill from file (n=10),script,10,ok,7837431,7849160,7959204,784916.0,1274.0
+data.array_fill_lines@1000,data,data ladder: indexed fill from file (n=1000),script,1000,ok,64237391,64322119,65558134,64322.1,15546.8
+data.array_fill_lines@100000,data,data ladder: indexed fill from file (n=100000),script,100000,ok,4878526882,5083443411,5434130870,50834.4,19671.7
