@@ -54,15 +54,17 @@ class Runner:
     # -- prepare a case's workdir / script / argv ---------------------------
     def _prepare(self, case: Case, workdir: str):
         os.makedirs(workdir, exist_ok=True)
+        # newline="\n" everywhere: on Windows, text mode would translate
+        # to CRLF and the shell under test would read CR as payload.
         for rel, content in case.files:
             dest = os.path.join(workdir, rel.replace("{work}", workdir))
             os.makedirs(os.path.dirname(dest) or workdir, exist_ok=True)
-            with open(dest, "w", encoding="utf-8") as f:
+            with open(dest, "w", encoding="utf-8", newline="\n") as f:
                 f.write(materialize(content))
         script_path = None
         if case.kind in ("loop", "script") or "{script}" in case.argv:
             script_path = os.path.join(workdir, "case.sh")
-            with open(script_path, "w", encoding="utf-8") as f:
+            with open(script_path, "w", encoding="utf-8", newline="\n") as f:
                 f.write(render_script(case))
         if case.kind == "process":
             argv = [self.shell] + render_argv(case, script_path, workdir)
