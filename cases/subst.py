@@ -51,3 +51,23 @@ CASES = [
       "( echo a; echo b ) | wc -l >/dev/null", iters=100,
       tags=("subst", "spawn")),
 ]
+
+# --- corpus v2 additions: ${ } no-fork substitution and process
+# substitution write/nested forms (depth/volume ladders in v2_gen) ---
+CASES += [
+    C("subst.cmd_nofork", "${ } no-fork substitution", "x=${ echo hi; }",
+      iters=1000, tags=("v2",)),
+    C("subst.cmd_nofork_assign", "${ } with persistent assignment",
+      "x=${ y=$((y+1)); echo $y; }", setup="y=1", iters=1000,
+      tags=("v2",)),
+    C("subst.procsub_write_tee", "write into >(cat) process substitution",
+      "echo hi > >(cat >/dev/null)", iters=200, tags=("v2", "spawn")),
+    C("subst.procsub_write_fanout", "tee fan-out into two >(cat)",
+      "printf 'x\\n' | tee >(cat >/dev/null) >(cat >/dev/null) "
+      ">/dev/null", iters=100, tags=("v2", "spawn")),
+    C("subst.procsub_nested", "procsub inside procsub",
+      "cat <(cat <(echo deep)) >/dev/null", iters=100,
+      tags=("v2", "spawn")),
+    C("subst.cmd_multi_stmt", "multi-statement $() body",
+      "x=$(a=3; b=4; echo $((a * b)))", iters=500, tags=("v2",)),
+]

@@ -58,3 +58,68 @@ CASES = [
       "while (( $# )); do case $1 in -v) v=1;; --out) shift; o=$1;; "
       "--count) shift; c=$1;; *) t=$1;; esac; shift; done", 1000),
 ]
+
+# --- corpus v2 additions: more realistic script shapes (size ladders
+# for generated shapes live in generators/v2_gen.py) ---
+_INI2000 = "\n".join(
+    ("[sec%d]" % (i // 20)) if i % 20 == 0 else
+    ("key%d=value%d" % (i, i)) for i in range(2000)) + "\n"
+
+_V2 = [
+    C("mixed.ini_section_parse@2000", "ini parse: sections into assoc",
+      "declare -A cfg=(); sec=base; "
+      "while IFS= read -r l; do "
+      "case $l in \\[*\\]) sec=${l#[}; sec=${sec%]};; "
+      "*) cfg[$sec.${l%%=*}]=${l#*=};; esac; "
+      "done < cfg.ini; x=${cfg[sec5.key105]}", 2000,
+      files=(("cfg.ini", _INI2000),)),
+    C("mixed.log_levels_count@20000", "count 2nd-field value over word log",
+      "declare -A cnt=(); "
+      "while read -r w1 w2 rest; do "
+      "case $w2 in charlie) cnt[c]=$(( ${cnt[c]:-0} + 1 ));; "
+      "*) cnt[o]=$(( ${cnt[o]:-0} + 1 ));; esac; "
+      "done < log.txt; echo ${cnt[c]} >/dev/null", 20000,
+      files=(("log.txt", "@gen:words:20000"),)),
+    C("mixed.url_split@5000", "split URLs into proto/host/path",
+      "for ((j=0; j<5000; j++)); do "
+      "u=\"https://cdn$((j % 50)).example.com/assets/img$j.png?v=$j\"; "
+      "proto=${u%%://*}; rest=${u#*://}; host=${rest%%/*}; "
+      "path=${rest#*/}; done; x=$host", 5000),
+    C("mixed.semver_compare@2000", "semver-ish compare loop",
+      "gt=0; for ((j=0; j<2000; j++)); do "
+      "a=\"1.$((j % 20)).$((j % 7))\"; b=\"1.$((j % 20)).5\"; "
+      "IFS=. read -ra pa <<< \"$a\"; IFS=. read -ra pb <<< \"$b\"; "
+      "if (( pa[2] > pb[2] )); then gt=$((gt+1)); fi; done; "
+      "echo $gt >/dev/null", 2000),
+    C("mixed.rpn_machine@5000", "RPN stack machine over token cycle",
+      "declare -a st=(); top=0; "
+      "for ((j=0; j<5000; j++)); do "
+      "case $((j % 5)) in "
+      "0|1) st[top++]=$j;; "
+      "2) top=$((top-1)); st[top-1]=$(( st[top-1] + st[top] ));; "
+      "3) top=$((top-1)); st[top-1]=$(( st[top-1] * st[top] ));; "
+      "4) x=${st[top-1]};; esac; done; echo $x >/dev/null", 5000),
+    C("mixed.merge_sorted@2000", "merge two sorted 1000-arrays",
+      "i=0; j=0; c=0; "
+      "while (( i < 1000 && j < 1000 )); do "
+      "if (( a[i] < b[j] )); then last=${a[i]}; i=$((i+1)); "
+      "else last=${b[j]}; j=$((j+1)); fi; c=$((c+1)); done; "
+      "echo $c >/dev/null", 2000,
+      setup="a=(%s); b=(%s)" % (
+          " ".join(str(2 * i) for i in range(1000)),
+          " ".join(str(2 * i + 1) for i in range(1000)))),
+    C("mixed.backoff_calc@10000", "exponential backoff with cap, summed",
+      "d=1; s=0; for ((j=0; j<10000; j++)); do d=$((d * 2)); "
+      "if (( d > 30000 )); then d=30000; fi; s=$((s + d)); done; "
+      "echo $s >/dev/null", 10000),
+    C("mixed.env_sanitize@2000", "filter kv lines by key pattern, re-emit",
+      "n=0; while IFS== read -r k v; do "
+      "case $k in key1*) echo \"export $k='$v'\"; n=$((n+1));; esac; "
+      "done < env.txt > out.txt; echo $n >/dev/null", 2000,
+      files=(("env.txt", "@gen:kv:2000"),)),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2]
+del _replace, _V2

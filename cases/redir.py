@@ -55,3 +55,23 @@ CASES = [
     C("redir.devfull_nowhere", "write to /dev/null via fd var",
       "echo hi >&$fd", setup="exec {fd}>/dev/null", iters=3000),
 ]
+
+# --- corpus v2 additions (pipe-depth / fd-count / heredoc-size
+# ladders live in generators/v2_gen.py) ---
+CASES += [
+    C("redir.fd_open_close_many", "open + close 4 fds per iteration",
+      "exec 3>/dev/null 4>/dev/null 5>/dev/null 6>/dev/null; "
+      "exec 3>&- 4>&- 5>&- 6>&-", iters=1500, tags=("v2",)),
+    C("redir.herestring_big", "8KB herestring into cat",
+      "cat <<< \"$big\" >/dev/null",
+      setup="big=; for ((j=0; j<1000; j++)); do big+=abcdefgh; done",
+      iters=300, tags=("v2", "spawn")),
+    C("redir.heredoc_100", "heredoc of 100 lines in a loop",
+      "cat >/dev/null <<EOF\n" + "\n".join(
+          "heredoc content line %d" % i for i in range(100)) + "\nEOF",
+      iters=100, tags=("v2",)),
+    C("redir.multi_fd_write", "one write to each of 3 open file fds",
+      "echo a >&3; echo b >&4; echo c >&5",
+      setup="exec 3> m1.txt; exec 4> m2.txt; exec 5> m3.txt",
+      iters=1000, tags=("v2",)),
+]

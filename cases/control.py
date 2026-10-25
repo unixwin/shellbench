@@ -56,3 +56,42 @@ CASES = [
       kind="script", iters=20,
       files=(("pick.txt", "1\n"),)),
 ]
+
+# --- corpus v2 additions: nesting shapes, wide elif, extglob case,
+# select-to-EOF (branch-count and pure nesting ladders in v2_gen) ---
+_ELIF16 = ("if [ $n -eq 1 ]; then x=1; "
+           + "; ".join("elif [ $n -eq %d ]; then x=%d" % (i, i)
+                       for i in range(2, 17))
+           + "; else x=0; fi")
+
+_V2 = [
+    C("control.nest_mixed_deep", "for > if > while triple nesting",
+      "for ((k=0; k<3; k++)); do if (( k >= 0 )); then j=0; "
+      "while (( j < 3 )); do j=$((j+1)); x=$j; done; fi; done",
+      iters=1000),
+    C("control.elif_miss16", "16-branch elif chain, all miss",
+      _ELIF16, setup="n=99", iters=1500),
+    C("control.case_extglob_patterns", "case with extglob patterns",
+      "case $v in +([a-z])*) x=1;; *([0-9])) x=2;; *) x=3;; esac",
+      setup="shopt -s extglob; v=abc123", iters=3000),
+    C("control.select_eof", "select reads picks until EOF",
+      "n=0; select o in aa bb cc; do n=$((n+1)); done < picks.txt",
+      kind="script", iters=2, files=(("picks.txt", "1\n2\n"),),
+      epilogue="echo picks=$n", expect_out="picks=2", timeout=30.0),
+    C("control.group_redir_block", "{ } group with block redirect",
+      "{ echo one; echo two; echo three; } > block.out; "
+      "read -r l1 < block.out; x=$l1", kind="script", iters=3),
+    C("control.subshell_pipe_duo", "subshell | subshell pipeline",
+      "( echo a; echo b ) | ( read -r x; read -r y; echo $y >/dev/null )",
+      iters=200),
+    C("control.negate_pipe", "! pipeline negation",
+      "! printf 'x\\n' | grep -q z", iters=300),
+    C("control.while_cond_subst", "while (( $(...) )) condition",
+      "while (( $(echo $j) < 3 )); do j=$((j+1)); done",
+      setup="j=0", iters=1000),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2]
+del _replace, _V2

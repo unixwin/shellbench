@@ -51,3 +51,31 @@ CASES = [
     C("expand.seconds_read", "$SECONDS read", "x=$SECONDS", iters=8000),
     C("expand.lineno_read", "$LINENO read", "x=$LINENO", iters=8000),
 ]
+
+# --- corpus v2 additions: ${v@...} transforms, prefix indirection,
+# deep default chains, positional slicing (form x scale matrix in
+# generators/v2_gen.py) ---
+_V2 = [
+    C("expand.at_Q", "${v@Q} quoting transform", "x=${v@Q}",
+      setup="v='a b|c'", iters=3000),
+    C("expand.at_U", "${v@U} upper transform", "x=${v@U}",
+      setup="v=hello", iters=3000),
+    C("expand.at_a", "${v@a} attribute flags", "x=${n@a}",
+      setup="declare -i n=5", iters=3000),
+    C("expand.indirect_prefix_list", "${!BS_*} name list",
+      "x=${!BS_*}", setup="BS_A=1; BS_B=2; BS_C=3", iters=3000),
+    C("expand.nested_default3", "3-deep nested defaults",
+      "x=${u1:-${u2:-${u3:-deep}}}", iters=3000),
+    C("expand.positional_slice", "${@:2:2} positional slice",
+      "x=${@:2:2}", setup="set -- a b c d e", iters=3000),
+    C("expand.join_ifs_multi", "${a[*]} with two-char IFS",
+      "x=${a[*]}", setup="a=(aa bb cc); IFS='::'", iters=3000),
+    C("expand.substr_expr_offset", "expression offset in substring",
+      "x=${v: (n > 1 ? 2 : 0):4}", setup="v=abcdefghij; n=3",
+      iters=3000),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2]
+del _replace, _V2

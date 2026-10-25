@@ -44,3 +44,21 @@ CASES = [
     C("cond.dbracket_arith_cmp", "[[ a -eq b ]] vars",
       "[[ $a -eq $b ]]", setup="a=42; b=42"),
 ]
+
+# --- corpus v2 additions (-v on compound elements, combined string
+# tests; the file-test x state matrix lives in generators/v2_gen.py) ---
+_V2 = [
+    C("cond.dbracket_v_array_elem", "[[ -v a[1] ]]", "[[ -v a[1] ]]",
+      setup="a=(x y z)"),
+    C("cond.dbracket_v_assoc_key", "[[ -v m[k] ]]", "[[ -v m[k] ]]",
+      setup="declare -A m=([k]=v)"),
+    C("cond.dbracket_z_and_n", "[[ -z && -n ]] combined",
+      "[[ -z $e && -n $f ]]", setup="e=; f=x"),
+    C("cond.ef_self", "[ file -ef itself ]", "[ case.sh -ef case.sh ]",
+      iters=3000),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2]
+del _replace, _V2

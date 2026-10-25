@@ -50,3 +50,39 @@ CASES = [
       "done < data.txt", 50000,
       files=(("data.txt", "@gen:kv:50000"),)),
 ]
+
+# --- corpus v2 additions: delimiter reads, fd reads, bulk file
+# write/read shapes (1M-line and throughput ladders in v2_gen) ---
+_NULS = "\0".join("rec%d" % i for i in range(10000)) + "\0"
+_CSVLINE = ",".join("f%d" % i for i in range(260))
+
+_V2 = [
+    C("data.read_delim_nul@10000", "read -d '' over 10k NUL records",
+      "c=0; while IFS= read -r -d '' rec; do c=$((c+1)); "
+      "done < data.bin; echo $c >/dev/null", 10000,
+      files=(("data.bin", _NULS),)),
+    C("data.mapfile_delim_comma", "mapfile -d , over one 260-field line",
+      "mapfile -d , -t a < data.csv; x=${#a[@]}", 260,
+      files=(("data.csv", _CSVLINE + "\n"),)),
+    C("data.printf_file_block@50000", "printf 50k lines, one redirect",
+      "for ((j=0; j<50000; j++)); do printf 'row %d x\\n' $j; "
+      "done > out.txt; read -r l < out.txt", 50000),
+    C("data.read_u_fd@20000", "read -u 3 over 20k lines",
+      "c=0; while IFS= read -r -u 3 l; do c=$((c+1)); "
+      "done 3< data.txt; echo $c >/dev/null", 20000,
+      files=(("data.txt", "@gen:lines:20000"),)),
+    C("data.line_transform_write@20000", "read/transform/write 20k lines",
+      "while IFS= read -r l; do "
+      "printf '%s|%s\\n' \"${l%% *}\" \"${#l}\"; "
+      "done < data.txt > out.txt", 20000,
+      files=(("data.txt", "@gen:lines:20000"),)),
+    C("data.tail_ring@100000", "ring buffer of last 8 over 100k lines",
+      "declare -a ring=(); i=0; while IFS= read -r l; do "
+      "ring[i%8]=$l; i=$((i+1)); done < data.txt; x=${ring[0]}", 100000,
+      files=(("data.txt", "@gen:lines:100000"),)),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2]
+del _replace, _V2

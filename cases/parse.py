@@ -74,3 +74,141 @@ CASES = [
          category="parse", kind="process", argv=("-n", "{script}"),
          body="x='" + "a" * 40000 + "'\n", iters=1, tags=("parse",)),
 ]
+
+
+# ---------------------------------------------------------------------------
+# corpus v2 additions: bigger corpora + new grammar shapes. Existing
+# builders are reused at new sizes; new builders cover nesting, pure
+# arithmetic lines, redirections, assignments, case statements,
+# heredocs, quote density and pipeline lines.
+# ---------------------------------------------------------------------------
+
+def _nested(units):
+    out = []
+    for _ in range(units):
+        out.append("if [ $x -gt 0 ]; then")
+        out.append("  for v in a b c; do")
+        out.append("    while [ $j -lt 3 ]; do j=$((j+1)); done")
+        out.append("  done")
+        out.append("else")
+        out.append("  case $v in a) echo a;; *) echo z;; esac")
+        out.append("fi")
+        out.append("y=$(( (x + 1) * 2 ))")
+    return "\n".join(out) + "\n"
+
+
+def _arith_lines(n):
+    return "\n".join(
+        "r%d=$(( (a + %d) * (b - %d) %% 7 + 2 ** 3 ))" % (i, i, i)
+        for i in range(n)) + "\n"
+
+
+def _redir_lines(n):
+    return "\n".join(
+        "cmd%d arg1 arg2 > /dev/null 2>&1 < /dev/null" % i
+        for i in range(n)) + "\n"
+
+
+def _assign_lines(n):
+    out = []
+    for i in range(n // 4):
+        out.append("v%d=value%d" % (i, i))
+        out.append("arr[%d]=$((%d * 2))" % (i, i))
+        out.append("s%d=${v:-def%d}" % (i, i))
+        out.append("declare -i n%d=%d" % (i, i))
+    return "\n".join(out) + "\n"
+
+
+def _case_lines(units):
+    out = []
+    for i in range(units):
+        out.append("case $v%d in" % i)
+        out.append("  a) echo alpha;;")
+        out.append("  b|B) echo beta;;")
+        out.append("  [0-9]) echo digit;;")
+        out.append("  *) echo other;;")
+        out.append("esac")
+    return "\n".join(out) + "\n"
+
+
+def _heredoc_blocks(n):
+    out = []
+    for i in range(n):
+        out.append("cat <<EOF%d" % i)
+        out.append("body line with $var expansion")
+        out.append("plain body line")
+        out.append("EOF%d" % i)
+    return "\n".join(out) + "\n"
+
+
+def _quote_lines(n):
+    return "\n".join(
+        "x%d='a'\"b\"\\'c\\''d'\"e\"$((1+2))" % i
+        for i in range(n)) + "\n"
+
+
+def _pipe_lines(n):
+    return "\n".join(
+        "producer%d | filter | sink > /dev/null; ( a=%d; b=2 )" % (i, i)
+        for i in range(n)) + "\n"
+
+
+def _comment_mix(n):
+    out = []
+    for i in range(n // 2):
+        out.append("# comment %d explaining the next statement" % i)
+        out.append("echo value_%d >/dev/null" % i)
+    return "\n".join(out) + "\n"
+
+
+_V2_PARSE = [
+    _p_case("parse.n_simple@500", "parse -n: 500 simple commands",
+            _simple(500), 500),
+    _p_case("parse.n_simple@10000", "parse -n: 10000 simple commands",
+            _simple(10000), 10000),
+    _p_case("parse.n_funcs@500", "parse -n: 500 function definitions",
+            _funcs(500), 500),
+    _p_case("parse.n_funcs@5000", "parse -n: 5000 function definitions",
+            _funcs(5000), 5000),
+    _p_case("parse.n_control@5000", "parse -n: control/arith corpus 5000",
+            _control(5000), 5000),
+    _p_case("parse.n_control@10000", "parse -n: control/arith corpus 10000",
+            _control(10000), 10000),
+    _p_case("parse.n_expand@5000", "parse -n: expansion corpus 5000",
+            _expand(5000), 5000),
+    _p_case("parse.n_expand@10000", "parse -n: expansion corpus 10000",
+            _expand(10000), 10000),
+    _p_case("parse.n_mixed@10000", "parse -n: mixed corpus 10000 lines",
+            _simple(4000) + _funcs(2000) + _control(2500) + _expand(1500),
+            10000),
+    _p_case("parse.n_mixed@20000", "parse -n: mixed corpus 20000 lines",
+            _simple(8000) + _funcs(4000) + _control(5000) + _expand(3000),
+            20000),
+    _p_case("parse.n_nested@1600", "parse -n: nested blocks corpus",
+            _nested(200), 1600),
+    _p_case("parse.n_arith@4000", "parse -n: arithmetic lines",
+            _arith_lines(4000), 4000),
+    _p_case("parse.n_redir@3000", "parse -n: redirection lines",
+            _redir_lines(3000), 3000),
+    _p_case("parse.n_assign@4000", "parse -n: assignment lines",
+            _assign_lines(4000), 4000),
+    _p_case("parse.n_case@2400", "parse -n: case statements",
+            _case_lines(400), 2400),
+    _p_case("parse.n_heredoc@400", "parse -n: heredoc blocks",
+            _heredoc_blocks(100), 400),
+    _p_case("parse.n_quote@4000", "parse -n: quote-dense lines",
+            _quote_lines(4000), 4000),
+    _p_case("parse.n_pipe@3000", "parse -n: pipeline/subshell lines",
+            _pipe_lines(3000), 3000),
+    _p_case("parse.n_comment_mix@4000", "parse -n: comment/code mix",
+            _comment_mix(4000), 4000),
+    Case(id="parse.long_line_words", title="script load: one 20k-word line",
+         category="parse", kind="process", argv=("-n", "{script}"),
+         body="echo " + " ".join("w%d" % i for i in range(20000)) + "\n",
+         iters=1, tags=("parse",)),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2_PARSE]
+del _replace, _V2_PARSE

@@ -45,3 +45,37 @@ CASES = [
       "$BASH -c f", setup="f() { :; }; export -f f", iters=200,
       tags=("funcs", "spawn")),
 ]
+
+# --- corpus v2 additions (argument/local/chain ladders live in
+# generators/v2_gen.py; these are the hand-shaped call forms) ---
+CASES += [
+    C("funcs.call_capture_counter", "call + capture counter via $()",
+      "x=$(f)", setup="n=0; f() { n=$((n+1)); echo $n; }", iters=1000,
+      tags=("v2",)),
+    C("funcs.call_redir_devnull", "call with >/dev/null 2>&1 on the call",
+      "f >/dev/null 2>&1", setup="f() { echo out; echo err >&2; }",
+      iters=2000, tags=("v2",)),
+    C("funcs.call_passthrough3", "arg transformed down a 3-call chain",
+      "f 0",
+      setup="h() { x=$1; }; g() { h $(($1+1)); }; "
+            "f() { g $(($1+1)); }", iters=3000, tags=("v2",)),
+    C("funcs.call_variadic_sum", "variadic $@ arithmetic sum",
+      "f 1 2 3 4 5 6",
+      setup="f() { local s=0 a; for a in \"$@\"; do s=$((s+a)); done; "
+            "x=$s; }", iters=3000, tags=("v2",)),
+    C("funcs.call_local_array", "local array inside function",
+      "f", setup="f() { local -a t=(1 2 3); x=${t[1]}; }", iters=3000,
+      tags=("v2",)),
+    C("funcs.call_forward_at", "forward \"$@\" to another function",
+      "f a b c d e", setup="g() { x=$#; }; f() { g \"$@\"; }",
+      iters=3000, tags=("v2",)),
+    C("funcs.recur_countdown@100", "recursive countdown sum from 100",
+      "r=$(f 100); echo $r >/dev/null",
+      setup="f() { if (( $1 <= 0 )); then echo 0; "
+            "else echo $(( $1 + $(f $(($1-1))) )); fi; }",
+      kind="script", iters=100, tags=("v2",), timeout=120.0),
+    C("funcs.call_in_pipeline", "function as pipeline stage",
+      "printf 'x\\n' | f | read -r x",
+      setup="f() { read -r l; echo \"got:$l\"; }", iters=150,
+      tags=("v2", "spawn")),
+]

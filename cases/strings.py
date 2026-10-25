@@ -54,3 +54,46 @@ CASES = [
     C("strings.repeat_printf", "printf %*s width from arg",
       "printf '%*s' 40 '' >/dev/null", iters=3000),
 ]
+
+# --- corpus v2 additions: Unicode / multibyte operations under
+# C.UTF-8 (with C-locale contrast pairs) and length ladders (the
+# op x length matrix itself lives in generators/v2_gen.py). Only
+# C.utf8 exists on the reference box, so that is the locale used. ---
+_UTF8 = (("LC_ALL", "C.UTF-8"),)
+_CLOC = (("LC_ALL", "C"),)
+
+_V2 = [
+    C("strings.u_length_chars", "multibyte ${#s} under C.UTF-8",
+      "x=${#s}", setup="s='café résumé naïve'", iters=5000, env=_UTF8),
+    C("strings.u_length_bytes", "same string ${#s} under C (bytes)",
+      "x=${#s}", setup="s='café résumé naïve'", iters=5000, env=_CLOC),
+    C("strings.u_substr", "multibyte substring ${s:2:4}",
+      "x=${s:2:4}", setup="s='aébc déf ghi'", iters=3000, env=_UTF8),
+    C("strings.u_upper", "${s^^} with accented letters",
+      "x=${s^^}", setup="s='café déjà vu'", iters=3000, env=_UTF8),
+    C("strings.u_lower", "${s,,} with accented letters",
+      "x=${s,,}", setup="s='CAFÉ DÉJÀ VU'", iters=3000, env=_UTF8),
+    C("strings.u_pattern", "[[ == *word* ]] with multibyte word",
+      "[[ $s == *résumé* ]]", setup="s='le résumé final'", iters=3000,
+      env=_UTF8),
+    C("strings.u_class_utf8", "[[:alpha:]] matches é under C.UTF-8",
+      "[[ $w =~ ^[[:alpha:]]+$ ]]", setup="w='été'", iters=3000,
+      env=_UTF8),
+    C("strings.u_class_c", "[[:alpha:]] vs é bytes under C",
+      "[[ $w =~ ^[[:alpha:]]+$ ]]", setup="w='été'", iters=3000,
+      env=_CLOC),
+    C("strings.u_replace", "${s//é/e} multibyte replace",
+      "x=${s//é/e}", setup="s='café béret'", iters=3000, env=_UTF8),
+    C("strings.u_emoji", "emoji string length + substring",
+      "x=${s:1:3}; y=${#s}", setup="s='a😀b🎉cd'", iters=3000,
+      env=_UTF8),
+    C("strings.u_japanese_substr", "CJK substring ${s: -3}",
+      "x=${s: -3}", setup="s='テストデータです'", iters=3000, env=_UTF8),
+    C("strings.u_case_first", "${s^} on accented first letter",
+      "x=${s^}", setup="s='élan vital'", iters=3000, env=_UTF8),
+]
+
+from dataclasses import replace as _replace  # noqa: E402
+
+CASES += [_replace(c, tags=c.tags + ("v2",)) for c in _V2]
+del _replace, _V2
