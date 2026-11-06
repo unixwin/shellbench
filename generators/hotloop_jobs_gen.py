@@ -277,14 +277,17 @@ for suffix, title, body in (
     add("sl_%s" % suffix.replace("sl_", ""), title, "", body, N_SPAWN, SIG)
 
 # Signal-delivery variants on a spawned sleep 30 (always reaped).
-for sname in ("TERM", "KILL", "INT", "HUP", "QUIT", "PIPE", "ALRM", "USR1", "USR2"):
-    if sname in ("USR1", "USR2"):
-        # USR1/USR2 kill sleep by default; second signal is a no-op probe.
-        body = ("sleep 30 & p=$!; kill -%s $p 2>/dev/null; "
-                "kill -TERM $p 2>/dev/null; wait $p 2>/dev/null" % sname)
-    else:
-        body = "sleep 30 & p=$!; kill -%s $p; wait $p 2>/dev/null" % sname
+# QUIT/USR1/USR2 do not reliably kill `sleep &` (SIGQUIT is ignored for
+# async children without job control; USR1/USR2 use default action), so
+# those get a follow-up TERM probe to stay bounded.
+for sname in ("TERM", "KILL", "INT", "HUP", "PIPE", "ALRM"):
+    body = "sleep 30 & p=$!; kill -%s $p; wait $p 2>/dev/null" % sname
     add("sl_kill_%s" % sname.lower(), "kill -%s bg sleep" % sname, "",
+        body, N_SPAWN, SIG)
+for sname in ("USR1", "USR2", "QUIT"):
+    body = ("sleep 30 & p=$!; kill -%s $p 2>/dev/null; "
+            "kill -TERM $p 2>/dev/null; wait $p 2>/dev/null" % sname)
+    add("sl_kill_%s" % sname.lower(), "kill -%s bg sleep (+TERM)" % sname, "",
         body, N_SPAWN, SIG)
 add("sl_kill_s_term", "kill -s TERM", "",
     "sleep 30 & p=$!; kill -s TERM $p; wait $p 2>/dev/null", N_SPAWN, SIG)
