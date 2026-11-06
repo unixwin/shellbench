@@ -1,0 +1,1018 @@
+{
+ "meta": {
+  "tool": "benchsuite 0.1.0",
+  "shell": "/usr/bin/bash",
+  "shell_name": "gnu-linux",
+  "shell_version": "GNU bash，版本 5.3.9(1)-release (x86_64-pc-linux-gnu)",
+  "started": "2026-11-06T14:50:41",
+  "reps": 3,
+  "warmup": 1,
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "machine": "x86_64",
+  "python": "3.14.4",
+  "cpu_count": 16,
+  "loadavg_at_start": "5.95 5.75 5.30 8/3393 3155730"
+ },
+ "results": [
+  {
+   "id": "hotloop.floor_colon",
+   "title": "hotloop bare colon (for-machinery floor)",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 120000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214325999,
+    214088251,
+    214108447
+   ],
+   "min_ns": 214088251,
+   "median_ns": 214108447,
+   "p95_ns": 214325999,
+   "ns_per_op": 1784.2370583333334,
+   "ops_per_s": 560463.6420533189
+  },
+  {
+   "id": "hotloop.floor_arith_incr",
+   "title": "hotloop for-machinery + (( )) increment",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 120000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    213992722,
+    214084011,
+    214240597
+   ],
+   "min_ns": 213992722,
+   "median_ns": 214084011,
+   "p95_ns": 214240597,
+   "ns_per_op": 1784.033425,
+   "ops_per_s": 560527.6145540826
+  },
+  {
+   "id": "hotloop.test_bracket_int",
+   "title": "hotloop [ ] integer -lt",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164132668,
+    163849222,
+    164109775
+   ],
+   "min_ns": 163849222,
+   "median_ns": 164109775,
+   "p95_ns": 164132668,
+   "ns_per_op": 2735.1629166666667,
+   "ops_per_s": 365608.9346292748
+  },
+  {
+   "id": "hotloop.test_builtin_int",
+   "title": "hotloop test builtin -lt",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164072203,
+    164004864,
+    164123244
+   ],
+   "min_ns": 164004864,
+   "median_ns": 164072203,
+   "p95_ns": 164123244,
+   "ns_per_op": 2734.5367166666665,
+   "ops_per_s": 365692.65788428526
+  },
+  {
+   "id": "hotloop.test_dbracket",
+   "title": "hotloop [[ ]] integer",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114057850,
+    114163330,
+    113997851
+   ],
+   "min_ns": 113997851,
+   "median_ns": 114057850,
+   "p95_ns": 114163330,
+   "ns_per_op": 1900.9641666666666,
+   "ops_per_s": 526048.842758302
+  },
+  {
+   "id": "hotloop.test_file_devnull",
+   "title": "hotloop [ ] -e /dev/null",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164096979,
+    214100265,
+    164254222
+   ],
+   "min_ns": 164096979,
+   "median_ns": 164254222,
+   "p95_ns": 214100265,
+   "ns_per_op": 2737.570366666667,
+   "ops_per_s": 365287.41404284874
+  },
+  {
+   "id": "hotloop.cond_if",
+   "title": "hotloop if [ ] then :",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164066028,
+    214221962,
+    164144340
+   ],
+   "min_ns": 164066028,
+   "median_ns": 164144340,
+   "p95_ns": 214221962,
+   "ns_per_op": 2735.739,
+   "ops_per_s": 365531.9458471733
+  },
+  {
+   "id": "hotloop.cond_and",
+   "title": "hotloop [ ] && :",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214077792,
+    163898248,
+    164044941
+   ],
+   "min_ns": 163898248,
+   "median_ns": 164044941,
+   "p95_ns": 214077792,
+   "ns_per_op": 2734.08235,
+   "ops_per_s": 365753.43094548705
+  },
+  {
+   "id": "hotloop.cond_case",
+   "title": "hotloop case single arm",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    113832859,
+    113838877,
+    113890133
+   ],
+   "min_ns": 113832859,
+   "median_ns": 113838877,
+   "p95_ns": 113890133,
+   "ns_per_op": 1897.3146166666668,
+   "ops_per_s": 527060.7158220649
+  },
+  {
+   "id": "hotloop.arith_postincr",
+   "title": "hotloop ((i++)) own counter",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    163938398,
+    114039150,
+    113961404
+   ],
+   "min_ns": 113961404,
+   "median_ns": 114039150,
+   "p95_ns": 163938398,
+   "ns_per_op": 1900.6525,
+   "ops_per_s": 526135.1036025786
+  },
+  {
+   "id": "hotloop.arith_dollar_assign",
+   "title": "hotloop i=$((i+1))",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    113906137,
+    164019795,
+    164049505
+   ],
+   "min_ns": 113906137,
+   "median_ns": 164019795,
+   "p95_ns": 164049505,
+   "ns_per_op": 2733.66325,
+   "ops_per_s": 365809.5048832368
+  },
+  {
+   "id": "hotloop.arith_let",
+   "title": "hotloop let i=i+1",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164444731,
+    164034984,
+    164090904
+   ],
+   "min_ns": 164034984,
+   "median_ns": 164090904,
+   "p95_ns": 164444731,
+   "ns_per_op": 2734.8484,
+   "ops_per_s": 365650.98087338224
+  },
+  {
+   "id": "hotloop.arith_eval",
+   "title": "hotloop eval ((i++))",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214154586,
+    214049939,
+    214029721
+   ],
+   "min_ns": 214029721,
+   "median_ns": 214049939,
+   "p95_ns": 214154586,
+   "ns_per_op": 3567.4989833333334,
+   "ops_per_s": 280308.4190554243
+  },
+  {
+   "id": "hotloop.arith_cmp",
+   "title": "hotloop (( )) comparison",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    113975599,
+    113857027,
+    114026797
+   ],
+   "min_ns": 113857027,
+   "median_ns": 113975599,
+   "p95_ns": 114026797,
+   "ns_per_op": 1899.5933166666666,
+   "ops_per_s": 526428.4682548586
+  },
+  {
+   "id": "hotloop.exp_assign",
+   "title": "hotloop x=$v plain",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114070279,
+    114132475,
+    114125097
+   ],
+   "min_ns": 114070279,
+   "median_ns": 114125097,
+   "p95_ns": 114132475,
+   "ns_per_op": 1902.08495,
+   "ops_per_s": 525738.8740707927
+  },
+  {
+   "id": "hotloop.exp_assign_quoted",
+   "title": "hotloop x=\"$v$v\" quoted concat",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164096620,
+    113924829,
+    113958640
+   ],
+   "min_ns": 113924829,
+   "median_ns": 113958640,
+   "p95_ns": 164096620,
+   "ns_per_op": 1899.3106666666667,
+   "ops_per_s": 526506.8098390785
+  },
+  {
+   "id": "hotloop.exp_default",
+   "title": "hotloop x=${v:-d}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    113949830,
+    114054241,
+    114132394
+   ],
+   "min_ns": 113949830,
+   "median_ns": 114054241,
+   "p95_ns": 114132394,
+   "ns_per_op": 1900.9040166666666,
+   "ops_per_s": 526065.4884372078
+  },
+  {
+   "id": "hotloop.exp_alt",
+   "title": "hotloop x=${v:+d}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    113947316,
+    164266548,
+    114420757
+   ],
+   "min_ns": 113947316,
+   "median_ns": 114420757,
+   "p95_ns": 164266548,
+   "ns_per_op": 1907.0126166666666,
+   "ops_per_s": 524380.3796893251
+  },
+  {
+   "id": "hotloop.exp_len",
+   "title": "hotloop x=${#v}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114056976,
+    114062019,
+    114064577
+   ],
+   "min_ns": 114056976,
+   "median_ns": 114062019,
+   "p95_ns": 114064577,
+   "ns_per_op": 1901.03365,
+   "ops_per_s": 526029.6155199567
+  },
+  {
+   "id": "hotloop.exp_trim_pre",
+   "title": "hotloop x=${v#pat}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164087909,
+    114076534,
+    164091601
+   ],
+   "min_ns": 114076534,
+   "median_ns": 164087909,
+   "p95_ns": 164091601,
+   "ns_per_op": 2734.7984833333335,
+   "ops_per_s": 365657.6548854675
+  },
+  {
+   "id": "hotloop.exp_trim_suf",
+   "title": "hotloop x=${v%pat}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    113980670,
+    113993908,
+    163966551
+   ],
+   "min_ns": 113980670,
+   "median_ns": 113993908,
+   "p95_ns": 163966551,
+   "ns_per_op": 1899.8984666666668,
+   "ops_per_s": 526343.9165538566
+  },
+  {
+   "id": "hotloop.exp_replace",
+   "title": "hotloop x=${v//l/L}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164109822,
+    164372728,
+    164167829
+   ],
+   "min_ns": 164109822,
+   "median_ns": 164167829,
+   "p95_ns": 164372728,
+   "ns_per_op": 2736.1304833333334,
+   "ops_per_s": 365479.6458324365
+  },
+  {
+   "id": "hotloop.exp_substr",
+   "title": "hotloop x=${v:off:len}",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164239367,
+    164143271,
+    164241479
+   ],
+   "min_ns": 164143271,
+   "median_ns": 164239367,
+   "p95_ns": 164241479,
+   "ns_per_op": 2737.3227833333335,
+   "ops_per_s": 365320.4532869394
+  },
+  {
+   "id": "hotloop.exp_concat",
+   "title": "hotloop x=$a$v$b",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114112493,
+    114035589,
+    114015100
+   ],
+   "min_ns": 114015100,
+   "median_ns": 114035589,
+   "p95_ns": 114112493,
+   "ns_per_op": 1900.59315,
+   "ops_per_s": 526151.5332726523
+  },
+  {
+   "id": "hotloop.exp_word_split",
+   "title": "hotloop set -- $v splitting",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164184183,
+    164098458,
+    164093437
+   ],
+   "min_ns": 164093437,
+   "median_ns": 164098458,
+   "p95_ns": 164184183,
+   "ns_per_op": 2734.9743,
+   "ops_per_s": 365634.1487377048
+  },
+  {
+   "id": "hotloop.exp_brace",
+   "title": "hotloop set -- {1..3} brace",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164076287,
+    164031778,
+    164203449
+   ],
+   "min_ns": 164031778,
+   "median_ns": 164076287,
+   "p95_ns": 164203449,
+   "ns_per_op": 2734.604783333333,
+   "ops_per_s": 365683.5554792875
+  },
+  {
+   "id": "hotloop.bi_colon",
+   "title": "hotloop builtin : dispatch",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 120000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214188132,
+    214118508,
+    214190696
+   ],
+   "min_ns": 214118508,
+   "median_ns": 214188132,
+   "p95_ns": 214190696,
+   "ns_per_op": 1784.9011,
+   "ops_per_s": 560255.1312226767
+  },
+  {
+   "id": "hotloop.bi_true",
+   "title": "hotloop builtin true",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 120000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    213992749,
+    214084223,
+    214077868
+   ],
+   "min_ns": 213992749,
+   "median_ns": 214077868,
+   "p95_ns": 214084223,
+   "ns_per_op": 1783.9822333333334,
+   "ops_per_s": 560543.6989871367
+  },
+  {
+   "id": "hotloop.bi_echo_devnull",
+   "title": "hotloop echo >/dev/null",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 10000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114110802,
+    114108149,
+    114113384
+   ],
+   "min_ns": 114108149,
+   "median_ns": 114110802,
+   "p95_ns": 114113384,
+   "ns_per_op": 11411.0802,
+   "ops_per_s": 87634.12249087513
+  },
+  {
+   "id": "hotloop.bi_printf_lit",
+   "title": "hotloop printf literal",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 10000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114178908,
+    113991933,
+    114031036
+   ],
+   "min_ns": 113991933,
+   "median_ns": 114031036,
+   "p95_ns": 114178908,
+   "ns_per_op": 11403.1036,
+   "ops_per_s": 87695.42355118127
+  },
+  {
+   "id": "hotloop.bi_printf_var",
+   "title": "hotloop printf %s \"$v\"",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 10000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114244816,
+    114482430,
+    114143975
+   ],
+   "min_ns": 114143975,
+   "median_ns": 114244816,
+   "p95_ns": 114482430,
+   "ns_per_op": 11424.4816,
+   "ops_per_s": 87531.32395959219
+  },
+  {
+   "id": "hotloop.bi_test_self",
+   "title": "hotloop [ 1 = 1 ]",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164129446,
+    164230000,
+    164373736
+   ],
+   "min_ns": 164129446,
+   "median_ns": 164230000,
+   "p95_ns": 164373736,
+   "ns_per_op": 2737.1666666666665,
+   "ops_per_s": 365341.2896547525
+  },
+  {
+   "id": "hotloop.bi_pwd",
+   "title": "hotloop pwd >/dev/null",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 10000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164531231,
+    114159218,
+    113951367
+   ],
+   "min_ns": 113951367,
+   "median_ns": 114159218,
+   "p95_ns": 164531231,
+   "ns_per_op": 11415.9218,
+   "ops_per_s": 87596.95603380885
+  },
+  {
+   "id": "hotloop.bi_cd_dot",
+   "title": "hotloop cd .",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 30000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214212943,
+    164032437,
+    164305762
+   ],
+   "min_ns": 164032437,
+   "median_ns": 164305762,
+   "p95_ns": 214212943,
+   "ns_per_op": 5476.8587333333335,
+   "ops_per_s": 182586.41471137208
+  },
+  {
+   "id": "hotloop.bi_unset",
+   "title": "hotloop x=1; unset x",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164236620,
+    164342974,
+    164263287
+   ],
+   "min_ns": 164236620,
+   "median_ns": 164263287,
+   "p95_ns": 164342974,
+   "ns_per_op": 2737.72145,
+   "ops_per_s": 365267.2553666846
+  },
+  {
+   "id": "hotloop.bi_shift",
+   "title": "hotloop set -- + shift",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    164151668,
+    164229446,
+    164241463
+   ],
+   "min_ns": 164151668,
+   "median_ns": 164229446,
+   "p95_ns": 164241463,
+   "ns_per_op": 2737.1574333333333,
+   "ops_per_s": 365342.5220712247
+  },
+  {
+   "id": "hotloop.bi_command",
+   "title": "hotloop command true",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114156746,
+    114181396,
+    114153716
+   ],
+   "min_ns": 114153716,
+   "median_ns": 114156746,
+   "p95_ns": 114181396,
+   "ns_per_op": 1902.6124333333332,
+   "ops_per_s": 525593.1173791516
+  },
+  {
+   "id": "hotloop.bi_builtin_kw",
+   "title": "hotloop builtin true",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114017751,
+    114984947,
+    166747803
+   ],
+   "min_ns": 114017751,
+   "median_ns": 114984947,
+   "p95_ns": 166747803,
+   "ns_per_op": 1916.4157833333334,
+   "ops_per_s": 521807.4327590028
+  },
+  {
+   "id": "hotloop.bi_eval",
+   "title": "hotloop eval 'x=1'",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214419317,
+    214250367,
+    214249252
+   ],
+   "min_ns": 214249252,
+   "median_ns": 214250367,
+   "p95_ns": 214419317,
+   "ns_per_op": 3570.83945,
+   "ops_per_s": 280046.19474000717
+  },
+  {
+   "id": "hotloop.composite_reported",
+   "title": "hotloop printf %d var + ((i++)) loop",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 30000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    114087318,
+    114112386,
+    114129926
+   ],
+   "min_ns": 114087318,
+   "median_ns": 114112386,
+   "p95_ns": 114129926,
+   "ns_per_op": 3803.7462,
+   "ops_per_s": 262898.71811110846
+  },
+  {
+   "id": "hotloop.sub_comsub_true",
+   "title": "hotloop x=$(true)",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 2000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    664996276,
+    614718108,
+    564897253
+   ],
+   "min_ns": 564897253,
+   "median_ns": 614718108,
+   "p95_ns": 664996276,
+   "ns_per_op": 307359.054,
+   "ops_per_s": 3253.5238086723157
+  },
+  {
+   "id": "hotloop.sub_comsub_echo",
+   "title": "hotloop x=$(echo hi)",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 2000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    715225346,
+    564685441,
+    614936929
+   ],
+   "min_ns": 564685441,
+   "median_ns": 614936929,
+   "p95_ns": 715225346,
+   "ns_per_op": 307468.4645,
+   "ops_per_s": 3252.36606500827
+  },
+  {
+   "id": "hotloop.sub_comsub_pwd",
+   "title": "hotloop x=$(pwd)",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 1000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    414788990,
+    364676421,
+    314447133
+   ],
+   "min_ns": 314447133,
+   "median_ns": 364676421,
+   "p95_ns": 414788990,
+   "ns_per_op": 364676.421,
+   "ops_per_s": 2742.156998409283
+  },
+  {
+   "id": "hotloop.sub_dollar_in_expand",
+   "title": "hotloop echo $(true) inline",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 1000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    314376927,
+    364437768,
+    315572877
+   ],
+   "min_ns": 314376927,
+   "median_ns": 315572877,
+   "p95_ns": 364437768,
+   "ns_per_op": 315572.877,
+   "ops_per_s": 3168.840140846452
+  },
+  {
+   "id": "hotloop.fn_call",
+   "title": "hotloop empty function call",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 60000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    214329304,
+    214228487,
+    164206996
+   ],
+   "min_ns": 164206996,
+   "median_ns": 214228487,
+   "p95_ns": 214329304,
+   "ns_per_op": 3570.474783333333,
+   "ops_per_s": 280074.7969619932
+  },
+  {
+   "id": "hotloop.fn_local",
+   "title": "hotloop function with local",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 30000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    163959956,
+    164339527,
+    164139873
+   ],
+   "min_ns": 163959956,
+   "median_ns": 164139873,
+   "p95_ns": 164339527,
+   "ns_per_op": 5471.3291,
+   "ops_per_s": 182770.94682533355
+  },
+  {
+   "id": "hotloop.ext_true",
+   "title": "hotloop /bin/true spawn",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 500,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    314380376,
+    264419339,
+    314279594
+   ],
+   "min_ns": 264419339,
+   "median_ns": 314279594,
+   "p95_ns": 314380376,
+   "ns_per_op": 628559.188,
+   "ops_per_s": 1590.9400722975352
+  },
+  {
+   "id": "hotloop.ext_echo",
+   "title": "hotloop /bin/echo spawn",
+   "category": "hotloop",
+   "kind": "loop",
+   "iters": 500,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    965617767,
+    915540151,
+    915570504
+   ],
+   "min_ns": 915540151,
+   "median_ns": 915570504,
+   "p95_ns": 965617767,
+   "ns_per_op": 1831141.008,
+   "ops_per_s": 546.1075884550339
+  },
+  {
+   "id": "hotloop.script_while_printf_arith",
+   "title": "hotloop script while loop: printf %d + ((i++))",
+   "category": "hotloop",
+   "kind": "script",
+   "iters": 10000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    63929957,
+    64143367,
+    63913452
+   ],
+   "min_ns": 63913452,
+   "median_ns": 63929957,
+   "p95_ns": 64143367,
+   "ns_per_op": 6392.9957,
+   "ops_per_s": 156421.19077289538
+  },
+  {
+   "id": "hotloop.script_while_test_only",
+   "title": "hotloop script while loop: test + ((i++))",
+   "category": "hotloop",
+   "kind": "script",
+   "iters": 10000,
+   "status": "ok",
+   "error": "",
+   "verified": true,
+   "runs_ns": [
+    31774166,
+    31826119,
+    31780435
+   ],
+   "min_ns": 31774166,
+   "median_ns": 31780435,
+   "p95_ns": 31826119,
+   "ns_per_op": 3178.0435,
+   "ops_per_s": 314659.0032515288
+  }
+ ]
+}
