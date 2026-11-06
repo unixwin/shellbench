@@ -423,9 +423,11 @@ SCRIPT_ROWS = [
 def cases() -> list:
     out = []
     files = (("data.txt", "@gen:lines:100000"),)
-    for suffix, title, setup, body, iters, extra in ROWS:
+    # Suffixes contain salted-hash fragments; the ROWS index guarantees
+    # global id uniqueness across processes (PYTHONHASHSEED varies).
+    for idx, (suffix, title, setup, body, iters, extra) in enumerate(ROWS):
         out.append(Case(
-            id="hotloop.%s" % suffix,
+            id="hotloop.%s_%d" % (suffix, idx),
             title="hotloop %s" % title, category="hotloop",
             tags=("hotloop", "generated", "v2") + tuple(extra),
             setup=setup, body=body, iters=iters,
