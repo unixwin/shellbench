@@ -16,8 +16,9 @@ if _ROOT not in sys.path:
 from . import (arrays, cond, control, coproc, data, errors, expand,  # noqa: E402
                funcs, glob, jobs, mixed, parse, redir, startup, strings,
                subst)
-from generators import (arith_gen, builtin_gen, expand_gen, hotloop_gen,  # noqa: E402
-                        scale_gen, v2_gen)
+from generators import (arith_gen, builtin_gen, expand_gen, hotloop_bi_gen,  # noqa: E402
+                        hotloop_cond_gen, hotloop_exp_gen, hotloop_gen,
+                        hotloop_misc_gen, scale_gen, v2_gen)
 
 CASES = []
 for _mod in (startup, parse, expand, strings, arrays, control, funcs,
@@ -29,6 +30,10 @@ CASES += arith_gen.cases()
 CASES += scale_gen.cases()
 CASES += v2_gen.cases()
 CASES += hotloop_gen.cases()
+CASES += hotloop_cond_gen.cases()
+CASES += hotloop_bi_gen.cases()
+CASES += hotloop_exp_gen.cases()
+CASES += hotloop_misc_gen.cases()
 
 # ---------------------------------------------------------------------------
 # Platform-applicability annotation (capability predicates), v2 cases.

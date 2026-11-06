@@ -48,10 +48,9 @@ for op in ("-eq", "-ne", "-lt", "-le", "-gt", "-ge"):
         add("t_int_%s_%s_%s" % (op.strip("-"), a.replace("-", "m"), b),
             "test int %s %s %s" % (a, op, b), "i=3",
             "test %s %s %s" % (a, op, b))
-        add("b_int_%s" % op.strip("-"),
-            "[ ] int %s" % op, "i=3",
-            "[ %s %s %s ]" % ("$__bs_i", op, "5000"))
-        break  # one bracket row per op is enough; test builtin carries the matrix
+    add("b_int_%s" % op.strip("-"),
+        "[ ] int %s" % op, "i=3",
+        "[ $__bs_i %s 5000 ]" % op)
 for op in ("=", "==", "!=", "<", ">"):
     for ai, (a, b) in enumerate((("x", "x"), ("$v", "hello"), ("$v", "world"), ("a$v", "ahello"))):
         add("t_str_%d_%d" % (abs(hash(op)) % 999, ai),
