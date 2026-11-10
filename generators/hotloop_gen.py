@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import os
 import sys
+import zlib
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from benchsuite.model import Case  # noqa: E402
@@ -25,6 +26,11 @@ N_SLOW = 2000
 N_SPAWN = 500
 
 ROWS = []
+
+
+def _h(s):
+    """Deterministic fragment (Python hash() is salted per process)."""
+    return zlib.crc32(str(s).encode()) % 100000
 
 
 def add(suffix, title, setup, body, iters=N, extra=()):
@@ -53,7 +59,7 @@ for op in ("-eq", "-ne", "-lt", "-le", "-gt", "-ge"):
         "[ $__bs_i %s 5000 ]" % op)
 for op in ("=", "==", "!=", "<", ">"):
     for ai, (a, b) in enumerate((("x", "x"), ("$v", "hello"), ("$v", "world"), ("a$v", "ahello"))):
-        add("t_str_%d_%d" % (abs(hash(op)) % 999, ai),
+        add("t_str_%d_%d" % (_h(op) % 999, ai),
             "test str %s" % op, "v=hello",
             "test %s %s %s" % (a, op, b))
 for op in ("-e", "-f", "-d", "-r", "-w", "-x", "-s", "-z", "-n",
@@ -72,13 +78,13 @@ for expr, title in (
     ("[[ x =~ ^h ]]", "[[ =~ regex"),
     ("[[ x == h* && $__bs_i -lt 5000 ]]", "[[ ]] mixed"),
 ):
-    add("dbracket_%d" % (abs(hash(expr)) % 9999), title, "x=hello", expr)
+    add("dbracket_%d" % (_h(expr) % 9999), title, "x=hello", expr)
 # if / && / || / ! / case / groups
 for cond in ("[ $__bs_i -lt 5000 ]", "((__bs_i < 5000))",
              "test $__bs_i -lt 5000", "[[ $__bs_i -lt 5000 ]]"):
-    add("if_%d" % (abs(hash(cond)) % 9999), "if %s" % cond[:20], "",
+    add("if_%d" % (_h(cond) % 9999), "if %s" % cond[:20], "",
         "if %s; then :; fi" % cond)
-    add("and_%d" % (abs(hash(cond)) % 9999), "%s && :" % cond[:20], "",
+    add("and_%d" % (_h(cond) % 9999), "%s && :" % cond[:20], "",
         "%s && :" % cond)
 add("or_short", "false || :", "", "false || :")
 add("not_bang", "! false", "", "! false")
@@ -120,7 +126,7 @@ for expr, title in (
     ("let 'i=i+1'", "let assign"), ("eval '((i++))'", "eval arith"),
     ("i=$((i>2 ? i : 2))", "ternary"), ("((i = i > 2 ? i : 2))", "ternary (( ))"),
 ):
-    add("arith_x_%d" % (abs(hash(expr)) % 9999), title, "i=3", expr)
+    add("arith_x_%d" % (_h(expr) % 9999), title, "i=3", expr)
 
 # ---------------------------------------------------------------------------
 # Parameter expansion: operator x value-shape x wrap-form matrix.
@@ -176,7 +182,7 @@ for vname, vval in VALUES.items():
 # unset-variable default family (distinct code path)
 for expr in ("x=${u:-DEF}", "x=${u-DEF}", "x=${u:+ALT}", "x=${u+ALT}",
              "x=${u:=DEF}", "x=${#u}"):
-    add("exp_unset_%d" % (abs(hash(expr)) % 9999), "expand unset %s" % expr[:14],
+    add("exp_unset_%d" % (_h(expr) % 9999), "expand unset %s" % expr[:14],
         "", expr)
 # word-level forms
 for body, title, setup in (
@@ -189,7 +195,7 @@ for body, title, setup in (
     ("[ $v = hello ]", "expand into test arg", "v=hello"),
     ("[[ $v == h* ]]", "expand into [[ ]] pattern", "v=hello"),
 ):
-    add("exp_word_%d" % (abs(hash(body)) % 9999), title, setup, body)
+    add("exp_word_%d" % (_h(body) % 9999), title, setup, body)
 
 # ---------------------------------------------------------------------------
 # Builtin dispatch: every taxonomy builtin x minimal valid invocation.
@@ -267,7 +273,7 @@ BI = [
     ("fg", "fg none", "", "fg 2>/dev/null"),
 ]
 for name, title, setup, body in BI:
-    add("bi_%s_%s" % (name.strip("[]"), abs(hash(body)) % 999), title, setup, body)
+    add("bi_%s_%s" % (name.strip("[]"), _h(body) % 999), title, setup, body)
 # arg-count / flag ladders on the hot dispatch builtins
 for argc in (0, 1, 2, 4, 8, 16):
     args = " ".join("w%d" % k for k in range(argc))
@@ -276,7 +282,7 @@ for argc in (0, 1, 2, 4, 8, 16):
     add("bi_printf_argc_%d" % argc, "printf argc %d" % argc, "",
         "printf '%%s ' %s >/dev/null" % args)
 for flags in ("", "-n ", "-e ", "-ne ", "-en "):
-    add("bi_echo_flag_%d" % (abs(hash(flags)) % 999), "echo flags %r" % flags, "",
+    add("bi_echo_flag_%d" % (_h(flags) % 999), "echo flags %r" % flags, "",
         "echo %sx >/dev/null" % flags)
 
 # ---------------------------------------------------------------------------
@@ -328,7 +334,7 @@ for sname, sval in SIZES.items():
         ("[[ $s == a* ]]", "[[ == glob"),
         ("[[ $s =~ ^a+f$ ]]", "[[ =~ regex"),
     ):
-        add("str_%s_%s" % (sname, abs(hash(expr)) % 999),
+        add("str_%s_%s" % (sname, _h(expr) % 999),
             "string %s %s" % (sname, title), "s='%s'" % sval, expr)
 
 # ---------------------------------------------------------------------------
@@ -342,12 +348,12 @@ for op, title in (
     ("3>/dev/null", "fd3 open"),
 ):
     extra = ("cap:devfs",)
-    add("redir_%d" % (abs(hash(op)) % 999), "redir %s" % title, "",
+    add("redir_%d" % (_h(op) % 999), "redir %s" % title, "",
         "echo x %s; exec 3>&- 2>/dev/null" % op if "3>" in op else "echo x %s" % op,
         extra=extra)
 for op in ("2>&1", "&>", ">&-", "3>&1"):
-    add("redir_fd_%d" % (abs(hash(op)) % 999), "fd op %s" % op, "",
-        "echo x %s >/dev/null" % op)
+    body = "echo x &>/dev/null" if op == "&>" else "echo x %s >/dev/null" % op
+    add("redir_fd_%d" % (_h(op) % 999), "fd op %s" % op, "", body)
 add("redir_herestring", "<<< herestring", "", "cat <<< hi >/dev/null", N_SLOW)
 
 # ---------------------------------------------------------------------------
@@ -380,7 +386,7 @@ for size in (4, 64):
         ("unset 'a[0]'", "unset element"),
         ("declare -p a >/dev/null", "declare -p dump"),
     ):
-        add("arr_%d_%s" % (size, abs(hash(expr)) % 999),
+        add("arr_%d_%s" % (size, _h(expr) % 999),
             "array %s size %d" % (title, size), "a=()",
             "a=(%s); %s" % (fill, expr) if "a=(" not in expr else expr)
 for size in (4, 64):
@@ -391,7 +397,7 @@ for size in (4, 64):
         ("x=${#h[@]}", "assoc len"),
         ("for y in \"${!h[@]}\"; do :; done", "assoc keys"),
     ):
-        add("assoc_%d_%s" % (size, abs(hash(expr)) % 999),
+        add("assoc_%d_%s" % (size, _h(expr) % 999),
             "assoc %s" % title, "declare -A h",
             "h[k%d]=v%d" % (size, size) + "; " + expr if "h[k" in expr else expr)
 
