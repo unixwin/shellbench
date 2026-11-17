@@ -1,0 +1,51 @@
+id,category,title,kind,iters,status,min_ns,median_ns,p95_ns,ns_per_op,ops_per_s
+hotloop.floor_colon,hotloop,hotloop bare colon (for-machinery floor),loop,120000,ok,31834282,63983475,64009705,533.2,1875484.3
+hotloop.floor_arith_incr,hotloop,hotloop for-machinery + (( )) increment,loop,30000,ok,164053933,164087344,164524640,5469.6,182829.5
+hotloop.test_bracket_int,hotloop,hotloop [ ] integer -lt,loop,10000,ok,113976399,114008525,114091154,11400.9,87712.7
+hotloop.test_builtin_int,hotloop,hotloop test builtin -lt,loop,10000,ok,113872720,113877082,113939210,11387.7,87814.0
+hotloop.test_dbracket,hotloop,hotloop [[ ]] integer,loop,10000,ok,113914359,114043271,114105788,11404.3,87686.0
+hotloop.test_file_devnull,hotloop,hotloop [ ] -e /dev/null,loop,10000,ok,63777223,113890787,113959572,11389.1,87803.4
+hotloop.cond_if,hotloop,hotloop if [ ] then :,loop,10000,ok,164177606,164201519,167781166,16420.2,60900.8
+hotloop.cond_and,hotloop,hotloop [ ] && :,loop,10000,ok,163940632,163999164,164092332,16399.9,60975.9
+hotloop.cond_case,hotloop,hotloop case single arm,loop,10000,ok,114007962,114053187,114205699,11405.3,87678.4
+hotloop.arith_postincr,hotloop,hotloop ((i++)) own counter,loop,30000,ok,164227582,214150978,214246486,7138.4,140088.1
+hotloop.arith_dollar_assign,hotloop,hotloop i=$((i+1)),loop,10000,ok,113937195,114007566,114106168,11400.8,87713.5
+hotloop.arith_let,hotloop,hotloop let i=i+1,loop,10000,ok,163973198,164085655,164681120,16408.6,60943.8
+hotloop.arith_eval,hotloop,hotloop eval ((i++)),loop,10000,ok,264133849,264140765,264205831,26414.1,37858.6
+hotloop.arith_cmp,hotloop,hotloop (( )) comparison,loop,30000,ok,164131861,214102356,214172982,7136.7,140119.9
+hotloop.exp_assign,hotloop,hotloop x=$v plain,loop,30000,ok,163986139,163993752,214224907,5466.5,182933.8
+hotloop.exp_assign_quoted,hotloop,"hotloop x=""$v$v"" quoted concat",loop,10000,ok,114024537,114040134,114117771,11404.0,87688.4
+hotloop.exp_default,hotloop,hotloop x=${v:-d},loop,10000,ok,114125782,114193523,114770546,11419.4,87570.6
+hotloop.exp_alt,hotloop,hotloop x=${v:+d},loop,10000,ok,113923714,114102134,164287079,11410.2,87640.8
+hotloop.exp_len,hotloop,hotloop x=${#v},loop,10000,ok,113927979,114013306,114064689,11401.3,87709.1
+hotloop.exp_trim_pre,hotloop,hotloop x=${v#pat},loop,10000,ok,113891104,113907972,113909182,11390.8,87790.2
+hotloop.exp_trim_suf,hotloop,hotloop x=${v%pat},loop,10000,ok,113952620,114099708,114126731,11410.0,87642.6
+hotloop.exp_replace,hotloop,hotloop x=${v//l/L},loop,10000,ok,164040608,164071052,164158042,16407.1,60949.2
+hotloop.exp_substr,hotloop,hotloop x=${v:off:len},loop,10000,ok,113951601,114122622,164375230,11412.3,87625.0
+hotloop.exp_concat,hotloop,hotloop x=$a$v$b,loop,10000,ok,113945010,113956231,264169719,11395.6,87753.0
+hotloop.exp_word_split,hotloop,hotloop set -- $v splitting,loop,10000,ok,113919267,113971647,114002048,11397.2,87741.1
+hotloop.exp_brace,hotloop,hotloop set -- {1..3} brace,loop,10000,ok,113949065,114003930,114033153,11400.4,87716.3
+hotloop.bi_colon,hotloop,hotloop builtin : dispatch,loop,120000,ok,31699189,31710595,31915948,264.3,3784224.2
+hotloop.bi_true,hotloop,hotloop builtin true,loop,30000,ok,164836847,214121596,214122025,7137.4,140107.3
+hotloop.bi_echo_devnull,hotloop,hotloop echo >/dev/null,loop,10000,ok,163915874,163974829,163976535,16397.5,60985.0
+hotloop.bi_printf_lit,hotloop,hotloop printf literal,loop,10000,ok,214257239,214324962,214384750,21432.5,46658.1
+hotloop.bi_printf_var,hotloop,"hotloop printf %s ""$v""",loop,10000,ok,214088771,214130275,264173139,21413.0,46700.5
+hotloop.bi_test_self,hotloop,hotloop [ 1 = 1 ],loop,30000,ok,214032269,214316126,214348126,7143.9,139980.1
+hotloop.bi_pwd,hotloop,hotloop pwd >/dev/null,loop,10000,ok,214221343,214227744,264223954,21422.8,46679.3
+hotloop.bi_cd_dot,hotloop,hotloop cd .,loop,10000,ok,214053051,214221010,264387978,21422.1,46680.8
+hotloop.bi_unset,hotloop,hotloop x=1; unset x,loop,10000,ok,163998386,164233017,164970831,16423.3,60889.1
+hotloop.bi_shift,hotloop,hotloop set -- + shift,loop,10000,ok,113850501,163977365,164458372,16397.7,60984.0
+hotloop.bi_command,hotloop,hotloop command true,loop,10000,ok,113977064,114149762,115759148,11415.0,87604.2
+hotloop.bi_builtin_kw,hotloop,hotloop builtin true,loop,10000,ok,63807713,113808548,113862388,11380.9,87866.9
+hotloop.bi_eval,hotloop,hotloop eval 'x=1',loop,10000,ok,214277591,214297109,214459485,21429.7,46664.2
+hotloop.composite_reported,hotloop,hotloop printf %d var + ((i++)) loop,loop,10000,ok,214179079,214194185,214331626,21419.4,46686.6
+hotloop.sub_comsub_true,hotloop,hotloop x=$(true),loop,2000,ok,63836257,63848678,63927643,31924.3,31324.1
+hotloop.sub_comsub_echo,hotloop,hotloop x=$(echo hi),loop,6000,ok,163971811,163992168,163994736,27332.0,36587.1
+hotloop.sub_comsub_pwd,hotloop,hotloop x=$(pwd),loop,6000,ok,113949826,114142609,164909306,19023.8,52565.8
+hotloop.sub_dollar_in_expand,hotloop,hotloop echo $(true) inline,loop,3000,ok,113980021,114174460,114275984,38058.2,26275.6
+hotloop.fn_call,hotloop,hotloop empty function call,loop,10000,ok,164014990,164104791,164170796,16410.5,60936.7
+hotloop.fn_local,hotloop,hotloop function with local,loop,10000,ok,364442112,364473956,364508571,36447.4,27436.8
+hotloop.ext_true,hotloop,hotloop /bin/true spawn,loop,500,ok,514686394,514828268,614885691,1029656.5,971.2
+hotloop.ext_echo,hotloop,hotloop /bin/echo spawn,loop,500,ok,1115982718,1165991125,1215934320,2331982.2,428.8
+hotloop.script_while_printf_arith,hotloop,hotloop script while loop: printf %d + ((i++)),script,10000,ok,264225271,264258065,264358579,26425.8,37841.8
+hotloop.script_while_test_only,hotloop,hotloop script while loop: test + ((i++)),script,10000,ok,163932579,214034477,364289999,21403.4,46721.4
